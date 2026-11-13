@@ -92,7 +92,16 @@ import {
   Upload
 } from "lucide-react";
 import { rtdbScoringEngine } from "../services/rtdbScoringEngine";
-import { saveMatchStateToFirebase, archiveMatchToFirebase, getActiveArena, setActiveArena, hasPendingCloudSync } from "../services/firebase";
+import {
+  saveMatchStateToFirebase,
+  archiveMatchToFirebase,
+  getActiveArena,
+  setActiveArena,
+  hasPendingCloudSync,
+  getLocalMatchSnapshot,
+  subscribeToConnectionStatus,
+  flushPendingCloudSync
+} from "../services/firebase";
 import {
   exportTournamentBackupJson,
   parseAndValidateBackupFile,
@@ -216,13 +225,24 @@ export type HubMatchAction =
 
 function getInitialHubState(): HubMatchState {
   let initialMatch = createDefaultMatchState();
+  const vaultMatch = getLocalMatchSnapshot();
+  if (vaultMatch && vaultMatch.id) {
+    initialMatch = vaultMatch;
+  }
   if (typeof window !== "undefined") {
     const saved = window.localStorage.getItem("ipsi_match_state");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (parsed && parsed.id) {
-          initialMatch = normalizeMatchState(parsed);
+          const normSaved = normalizeMatchState(parsed);
+          const savedTime = Number(normSaved.lastUpdatedAt) || 0;
+          const vaultTime = Number(initialMatch.lastUpdatedAt) || 0;
+          const savedVer = Number(normSaved.stateVersion) || 0;
+          const vaultVer = Number(initialMatch.stateVersion) || 0;
+          if (!vaultMatch || savedVer > vaultVer || (savedVer === vaultVer && savedTime > vaultTime)) {
+            initialMatch = normSaved;
+          }
         }
       } catch (e) {
         console.error("Gagal mengurai saved match state:", e);
@@ -1453,10 +1473,27 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
 
     const unsubMatch = rtdbScoringEngine.listenToActiveMatch(applyIncomingState);
     const unsubJuryUpdates = rtdbScoringEngine.subscribeMatchStateUpdates(applyIncomingState);
+    const unsubConnRestore = subscribeToConnectionStatus((connected) => {
+      if (connected) {
+        flushPendingCloudSync()
+          .then((res) => {
+            if (res.flushed > 0) {
+              setSyncCount(prev => prev + res.flushed);
+            }
+          })
+          .catch(() => {});
+      }
+    });
+    const handleFirebaseSynced = () => {
+      setSyncCount(prev => prev + 1);
+    };
+    window.addEventListener("jrz_firebase_synced", handleFirebaseSynced);
 
     return () => {
       unsubMatch();
       unsubJuryUpdates();
+      unsubConnRestore();
+      window.removeEventListener("jrz_firebase_synced", handleFirebaseSynced);
     };
   }, [currentUser, activeArena]);
 

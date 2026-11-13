@@ -1,5 +1,14 @@
 import { SyncPacket } from '../types/scoring';
-import { db, ref, set, onValue, off, sanitizeForFirebase } from '../services/firebase';
+import {
+  db,
+  ref,
+  set,
+  onValue,
+  off,
+  sanitizeForFirebase,
+  isCloudConnectionReady,
+  subscribeToConnectionStatus
+} from '../services/firebase';
 import { eventScopeManager } from '../services/eventScopeManager';
 
 type SyncListener = (packet: SyncPacket) => void;
@@ -8,7 +17,9 @@ class RealtimeSyncManager {
   private listeners: Set<SyncListener> = new Set();
   private clientId: string = '';
   private activeUnsub: (() => void) | null = null;
+  private connUnsub: (() => void) | null = null;
   private lastPacketTimestamp: number = 0;
+  private pendingPacket: SyncPacket | null = null;
 
   constructor() {
     this.clientId = 'client_' + Math.random().toString(36).substring(2, 9);
@@ -31,7 +42,22 @@ class RealtimeSyncManager {
         this.handleIncoming(packet);
       };
       onValue(packetRef, handler);
-      this.activeUnsub = () => off(packetRef, 'value', handler);
+      this.connUnsub = subscribeToConnectionStatus((connected) => {
+        if (connected && this.pendingPacket) {
+          const toFlush = this.pendingPacket;
+          this.pendingPacket = null;
+          set(ref(db, this.getPacketPath()), sanitizeForFirebase(toFlush)).catch(() => {
+            this.pendingPacket = toFlush;
+          });
+        }
+      });
+      this.activeUnsub = () => {
+        off(packetRef, 'value', handler);
+        if (this.connUnsub) {
+          this.connUnsub();
+          this.connUnsub = null;
+        }
+      };
     } catch {
       // Ignore if Firebase is temporarily unreachable
     }
@@ -56,13 +82,18 @@ class RealtimeSyncManager {
       timestamp: Date.now(),
     };
 
+    if (!isCloudConnectionReady()) {
+      this.pendingPacket = fullPacket;
+      return;
+    }
+
     try {
       const packetRef = ref(db, this.getPacketPath());
-      set(packetRef, sanitizeForFirebase(fullPacket)).catch((err) => {
-        console.warn('Firebase RTDB sync packet write warning:', err);
+      set(packetRef, sanitizeForFirebase(fullPacket)).catch(() => {
+        this.pendingPacket = fullPacket;
       });
-    } catch (err) {
-      console.warn('Firebase RTDB broadcast error:', err);
+    } catch {
+      this.pendingPacket = fullPacket;
     }
   }
 

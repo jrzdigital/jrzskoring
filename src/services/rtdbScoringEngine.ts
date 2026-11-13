@@ -10,11 +10,13 @@ import {
   saveMatchStateToFirebase,
   subscribeToActiveMatch,
   subscribeToConnectionStatus,
+  subscribeToPendingSync,
   registerDevicePresence,
   subscribeToDevicePresence,
   getActiveArena,
   setActiveArena,
   hasPendingCloudSync,
+  getPendingCloudSyncCount,
   flushPendingCloudSync,
   pushJuryPressToFirebase,
   subscribeToJuryPresses
@@ -27,6 +29,7 @@ export interface FirebaseSyncStatus {
   devicesCount: number;
   syncCount: number;
   pendingSync?: boolean;
+  pendingCount?: number;
 }
 
 class RtdbScoringEngine {
@@ -38,8 +41,10 @@ class RtdbScoringEngine {
   private unsubscribeMatch: (() => void) | null = null;
   private unsubscribePresence: (() => void) | null = null;
   private unsubscribeConn: (() => void) | null = null;
+  private unsubscribePending: (() => void) | null = null;
   private unsubscribeJuryPresses: (() => void) | null = null;
   private currentDeviceUnsub: (() => void) | null = null;
+  private lastDeviceMeta: { deviceId: string; roleName: string } | null = null;
   private activeDevices: { [key: string]: { active: boolean; ip?: string; lastSeen: number } } = {};
   private currentMatchState: MatchState | null = null;
   private onMatchStateUpdatedListeners: ((state: MatchState) => void)[] = [];
@@ -211,9 +216,31 @@ class RtdbScoringEngine {
       if (connected) {
         this.lastSyncTime = pingTime || Date.now();
         if (!wasConnected) {
-          flushPendingCloudSync().then(() => this.notifyStatus());
+          if (this.lastDeviceMeta) {
+            if (this.currentDeviceUnsub) {
+              this.currentDeviceUnsub();
+            }
+            this.currentDeviceUnsub = registerDevicePresence(
+              this.lastDeviceMeta.deviceId,
+              this.lastDeviceMeta.roleName,
+              this.arena
+            );
+          }
+          flushPendingCloudSync()
+            .then((res) => {
+              if (res.flushed > 0) {
+                this.syncCount += res.flushed;
+                this.lastSyncTime = Date.now();
+              }
+              this.notifyStatus();
+            })
+            .catch(() => this.notifyStatus());
         }
       }
+      this.notifyStatus();
+    });
+
+    this.unsubscribePending = subscribeToPendingSync(() => {
       this.notifyStatus();
     });
   }
@@ -225,7 +252,8 @@ class RtdbScoringEngine {
       lastSyncTime: this.lastSyncTime,
       devicesCount: Object.values(this.activeDevices).filter((d) => d.active).length,
       syncCount: this.syncCount,
-      pendingSync: hasPendingCloudSync(this.arena)
+      pendingSync: hasPendingCloudSync(this.arena),
+      pendingCount: getPendingCloudSyncCount(this.arena)
     };
   }
 
@@ -271,6 +299,7 @@ class RtdbScoringEngine {
   }
 
   public initDevice(deviceId: string, roleName: string) {
+    this.lastDeviceMeta = { deviceId, roleName };
     if (this.currentDeviceUnsub) {
       this.currentDeviceUnsub();
     }

@@ -1,26 +1,102 @@
 import { TournamentState, SystemNotification } from '../types';
 import { INITIAL_STATE } from './initialData';
 import { arenaAudio } from './audio';
-import { db, ref, set, onValue, off, sanitizeForFirebase } from '../services/firebase';
+import {
+  db,
+  ref,
+  set,
+  onValue,
+  off,
+  sanitizeForFirebase,
+  isCloudConnectionReady,
+  subscribeToConnectionStatus
+} from '../services/firebase';
 import { eventScopeManager } from '../services/eventScopeManager';
 
 type StateListener = (state: TournamentState) => void;
+
+const SYNC_BUS_CACHE_PREFIX = 'jrz_syncbus_cache_v1_';
+const SYNC_BUS_PENDING_PREFIX = 'jrz_syncbus_pending_v1_';
 
 class SyncBusManager {
   private state: TournamentState = INITIAL_STATE;
   private listeners: Set<StateListener> = new Set();
   private activeUnsub: (() => void) | null = null;
+  private connUnsub: (() => void) | null = null;
   private clientId: string = 'bus_' + Math.random().toString(36).substring(2, 9);
   private lastSoundEventId: string = '';
 
+  constructor() {
+    this.hydrateFromLocal();
+  }
+
+  private getEventId(): string {
+    return eventScopeManager.getActiveEventId() || 'EVENT-A';
+  }
+
   private getStatePath(): string {
-    const eventId = eventScopeManager.getActiveEventId() || 'EVENT-A';
-    return `events/${eventId}/tournamentBus/state`;
+    return `events/${this.getEventId()}/tournamentBus/state`;
   }
 
   private getSoundPath(): string {
-    const eventId = eventScopeManager.getActiveEventId() || 'EVENT-A';
-    return `events/${eventId}/tournamentBus/soundEvent`;
+    return `events/${this.getEventId()}/tournamentBus/soundEvent`;
+  }
+
+  private hydrateFromLocal() {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem(`${SYNC_BUS_CACHE_PREFIX}${this.getEventId()}`);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          this.state = parsed as TournamentState;
+        }
+      }
+    } catch {}
+  }
+
+  private saveLocalSnapshot(state: TournamentState, markPending: boolean) {
+    if (typeof window === 'undefined') return;
+    const ev = this.getEventId();
+    try {
+      window.localStorage.setItem(`${SYNC_BUS_CACHE_PREFIX}${ev}`, JSON.stringify(state));
+      if (markPending) {
+        window.localStorage.setItem(`${SYNC_BUS_PENDING_PREFIX}${ev}`, '1');
+      } else {
+        window.localStorage.removeItem(`${SYNC_BUS_PENDING_PREFIX}${ev}`);
+      }
+    } catch {}
+  }
+
+  private hasPendingLocal(): boolean {
+    if (typeof window === 'undefined') return false;
+    try {
+      return window.localStorage.getItem(`${SYNC_BUS_PENDING_PREFIX}${this.getEventId()}`) === '1';
+    } catch {
+      return false;
+    }
+  }
+
+  private pushCurrentStateToFirebase() {
+    if (!isCloudConnectionReady()) {
+      this.saveLocalSnapshot(this.state, true);
+      return;
+    }
+    try {
+      set(ref(db, this.getStatePath()), {
+        sender: this.clientId,
+        updatedAt: Date.now(),
+        state: sanitizeForFirebase(this.state),
+      })
+        .then(() => {
+          this.saveLocalSnapshot(this.state, false);
+        })
+        .catch(() => {
+          this.saveLocalSnapshot(this.state, true);
+        });
+    } catch {
+      this.saveLocalSnapshot(this.state, true);
+    }
   }
 
   private ensureFirebaseListeners() {
@@ -31,8 +107,15 @@ class SyncBusManager {
 
       const stateHandler = (snap: any) => {
         const remote = snap.val();
+        if (this.hasPendingLocal()) {
+          if (isCloudConnectionReady()) {
+            this.pushCurrentStateToFirebase();
+          }
+          return;
+        }
         if (remote && remote.state) {
           this.state = remote.state as TournamentState;
+          this.saveLocalSnapshot(this.state, false);
           this.notifyListeners();
         }
       };
@@ -54,9 +137,19 @@ class SyncBusManager {
       onValue(stateRef, stateHandler);
       onValue(soundRef, soundHandler);
 
+      this.connUnsub = subscribeToConnectionStatus((connected) => {
+        if (connected && this.hasPendingLocal()) {
+          this.pushCurrentStateToFirebase();
+        }
+      });
+
       this.activeUnsub = () => {
         off(stateRef, 'value', stateHandler);
         off(soundRef, 'value', soundHandler);
+        if (this.connUnsub) {
+          this.connUnsub();
+          this.connUnsub = null;
+        }
       };
     } catch {
       // Ignore setup errors when unmounted
@@ -92,17 +185,8 @@ class SyncBusManager {
     const newState = updater(this.state);
     this.state = newState;
 
-    try {
-      set(ref(db, this.getStatePath()), {
-        sender: this.clientId,
-        updatedAt: Date.now(),
-        state: sanitizeForFirebase(newState),
-      }).catch((err) => {
-        console.warn('Failed to sync state to Firebase RTDB:', err);
-      });
-    } catch (e) {
-      console.warn('Failed to write state to Firebase RTDB:', e);
-    }
+    this.saveLocalSnapshot(newState, !isCloudConnectionReady());
+    this.pushCurrentStateToFirebase();
 
     if (soundEffect) {
       this.playSound(soundEffect, soundCorner);
@@ -113,6 +197,7 @@ class SyncBusManager {
 
   public playSound(sound: 'gong' | 'buzzer' | 'point' | 'penalty', corner?: 'red' | 'blue') {
     this.handleSoundEvent(sound, corner);
+    if (!isCloudConnectionReady()) return;
     const id = `${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     this.lastSoundEventId = id;
     try {

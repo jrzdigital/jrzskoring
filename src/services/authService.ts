@@ -7,11 +7,14 @@ import {
   googleProvider,
   ref,
   get,
-  set,
-  update,
-  remove,
   sanitizeForFirebase,
-  assertOnlineForFirebase
+  assertOnlineForFirebase,
+  isCloudConnectionReady,
+  getLocalUsersSnapshot,
+  saveLocalUsersSnapshot,
+  saveUserToFirebase,
+  updateUserInFirebase,
+  deleteUserFromFirebase
 } from "./firebase";
 
 export const DEFAULT_USERS: UserAccount[] = [
@@ -140,25 +143,36 @@ class AuthService {
   }
 
   async getAllUsers(): Promise<UserAccount[]> {
-    assertOnlineForFirebase();
+    const cached = getLocalUsersSnapshot();
+    if (!isCloudConnectionReady()) {
+      return cached && cached.length > 0 ? cached : [...DEFAULT_USERS];
+    }
+
     try {
-      const snap = await get(ref(db, "users"));
+      const snap = await Promise.race([
+        get(ref(db, "users")),
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Firebase users read timeout")), 4000))
+      ]);
       if (snap.exists()) {
         const val = snap.val();
         const list = Array.isArray(val)
           ? val.filter(Boolean)
           : (Object.values(val || {}).filter(Boolean) as UserAccount[]);
-        if (list.length > 0) return list;
+        if (list.length > 0) {
+          saveLocalUsersSnapshot(list);
+          return list;
+        }
       }
 
       // Seed default users to Firebase RTDB if node is empty
       for (const def of DEFAULT_USERS) {
-        await set(ref(db, `users/${safeKey(def.id)}`), sanitizeForFirebase(def));
+        await saveUserToFirebase(def);
       }
+      saveLocalUsersSnapshot([...DEFAULT_USERS]);
       return [...DEFAULT_USERS];
     } catch (err) {
-      console.error("Gagal mengambil daftar pengguna dari Firebase:", err);
-      throw err;
+      console.warn("Gagal mengambil daftar pengguna dari Firebase, memakai cache lokal:", err);
+      return cached && cached.length > 0 ? cached : [...DEFAULT_USERS];
     }
   }
 
@@ -176,7 +190,6 @@ class AuthService {
     userId?: string;
     fullName?: string;
   }> {
-    assertOnlineForFirebase();
     const cleanUser = (username || "").trim().toLowerCase();
     const cleanPass = (password || "").trim();
 
@@ -209,7 +222,7 @@ class AuthService {
     );
 
     if (!found) {
-      return { success: false, error: "Akun tidak ditemukan di database Firebase." };
+      return { success: false, error: "Akun tidak ditemukan di database." };
     }
 
     if (found.password && found.password !== cleanPass) {
@@ -234,7 +247,6 @@ class AuthService {
     message?: string;
     error?: string;
   }> {
-    assertOnlineForFirebase();
     const cleanUsername = (payload.username || payload.email?.split("@")[0] || `user_${Date.now()}`).trim();
     const users = await this.getAllUsers();
 
@@ -244,7 +256,7 @@ class AuthService {
         (payload.email && (u.email || "").toLowerCase() === payload.email.toLowerCase())
     );
     if (duplicate) {
-      return { success: false, error: "Username atau Email sudah terdaftar di Firebase." };
+      return { success: false, error: "Username atau Email sudah terdaftar." };
     }
 
     const newUser: UserAccount = {
@@ -262,16 +274,17 @@ class AuthService {
       createdAt: Date.now()
     };
 
-    await set(ref(db, `users/${safeKey(newUser.id)}`), sanitizeForFirebase(newUser));
+    await saveUserToFirebase(newUser);
     return {
       success: true,
       user: newUser,
-      message: "Pendaftaran berhasil disimpan ke Firebase dan menunggu aktivasi Admin."
+      message: isCloudConnectionReady()
+        ? "Pendaftaran berhasil disimpan ke Firebase dan menunggu aktivasi Admin."
+        : "Pendaftaran disimpan lokal dan akan otomatis tersinkron ke Firebase saat koneksi stabil."
     };
   }
 
   async createUser(payload: Partial<UserAccount>): Promise<{ success: boolean; user?: UserAccount; error?: string }> {
-    assertOnlineForFirebase();
     const cleanUsername = (payload.username || `usr_${Date.now()}`).trim();
     const id = payload.id || `usr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const newUser: UserAccount = {
@@ -289,7 +302,7 @@ class AuthService {
       boundIp: payload.boundIp || "",
       createdAt: Date.now()
     };
-    await set(ref(db, `users/${safeKey(id)}`), sanitizeForFirebase(newUser));
+    await saveUserToFirebase(newUser);
     return { success: true, user: newUser };
   }
 
@@ -298,7 +311,6 @@ class AuthService {
   }
 
   async updateUser(payload: Partial<UserAccount> & { id?: string }): Promise<{ success: boolean; user?: UserAccount; error?: string }> {
-    assertOnlineForFirebase();
     const id = payload.id || payload.username;
     if (!id) return { success: false, error: "ID pengguna diperlukan." };
     const key = safeKey(id);
@@ -307,7 +319,7 @@ class AuthService {
       ...(payload.fullName && !payload.name ? { name: payload.fullName } : {}),
       ...(payload.name && !payload.fullName ? { fullName: payload.name } : {})
     });
-    await update(ref(db, `users/${key}`), updates);
+    await updateUserInFirebase(key, updates);
 
     if (this.currentUser && (this.currentUser.id === id || this.currentUser.username === payload.username)) {
       this.setCurrentUser({ ...this.currentUser, ...updates } as UserAccount);
@@ -316,25 +328,22 @@ class AuthService {
   }
 
   async deleteUser(userId: string, username?: string): Promise<{ success: boolean; error?: string }> {
-    assertOnlineForFirebase();
     const id = userId || username;
     if (!id) return { success: false, error: "ID pengguna diperlukan." };
-    await remove(ref(db, `users/${safeKey(id)}`));
+    await deleteUserFromFirebase(safeKey(id));
     return { success: true };
   }
 
   async resetPassword(userId: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
-    assertOnlineForFirebase();
-    await update(ref(db, `users/${safeKey(userId)}`), { password: newPassword });
+    await updateUserInFirebase(safeKey(userId), { password: newPassword });
     return { success: true };
   }
 
   async approveUser(userIdOrUsername: string, approvedBy: string): Promise<{ success: boolean; error?: string }> {
-    assertOnlineForFirebase();
     const users = await this.getAllUsers();
     const target = users.find((u) => u.id === userIdOrUsername || u.username === userIdOrUsername);
     const key = safeKey(target?.id || userIdOrUsername);
-    await update(ref(db, `users/${key}`), {
+    await updateUserInFirebase(key, {
       isApproved: true,
       status: "APPROVED",
       approvedBy,
@@ -377,7 +386,6 @@ class AuthService {
   }
 
   async signInWithGmail(email: string): Promise<{ success: boolean; user?: UserAccount; error?: string }> {
-    assertOnlineForFirebase();
     const cleanEmail = (email || "").trim().toLowerCase();
     if (!cleanEmail) return { success: false, error: "Alamat Gmail tidak valid." };
     const users = await this.getAllUsers();

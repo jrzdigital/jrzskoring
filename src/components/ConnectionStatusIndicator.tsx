@@ -73,6 +73,8 @@ export function ConnectionStatusIndicator({
   ];
 
   const isCloudOnline = browserOnline && firebaseStatus.connected;
+  const pendingCount = firebaseStatus.pendingCount || 0;
+  const hasPending = Boolean(firebaseStatus.pendingSync || pendingCount > 0);
 
   if (compact) {
     const activeCount = Object.values(mergedConnections).filter((d) => d.active).length;
@@ -84,30 +86,37 @@ export function ConnectionStatusIndicator({
         className="flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur border border-purple-900/30 rounded-full text-xs"
         title={
           isCloudOnline
-            ? "Online: Firebase Realtime Database Terhubung"
-            : "Koneksi Firebase Terputus: Memerlukan Internet Aktif"
+            ? hasPending
+              ? `Menyinkronkan ${pendingCount} perubahan tertunda ke Firebase RTDB`
+              : "Online: Firebase Realtime Database Terhubung"
+            : `Penyangga Lokal Aktif (${pendingCount} antrean) — otomatis sinkron saat koneksi pulih`
         }
       >
         <span className="relative flex h-2 w-2">
           <span
             className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-              isCloudOnline ? "bg-emerald-400" : "bg-rose-400"
+              isCloudOnline ? (hasPending ? "bg-cyan-400" : "bg-emerald-400") : "bg-amber-400"
             }`}
           ></span>
           <span
             className={`relative inline-flex rounded-full h-2 w-2 ${
-              isCloudOnline ? "bg-emerald-500" : "bg-rose-500"
+              isCloudOnline ? (hasPending ? "bg-cyan-500" : "bg-emerald-500") : "bg-amber-500"
             }`}
           ></span>
         </span>
         <span className="font-mono text-[10px] text-slate-300 flex items-center gap-1.5">
           {isCloudOnline ? (
-            <>
-              Firebase: <span className="text-emerald-400 font-bold">{Math.max(1, activeCount)}</span>/{totalCount}
-            </>
+            hasPending ? (
+              <span className="text-cyan-300 font-bold">Sync ({pendingCount})</span>
+            ) : (
+              <>
+                Firebase: <span className="text-emerald-400 font-bold">{Math.max(1, activeCount)}</span>/{totalCount}
+              </>
+            )
           ) : (
-            <span className="text-rose-400 font-bold flex items-center gap-1">
-              <WifiOff className="w-2.5 h-2.5" /> Offline Terblokir
+            <span className="text-amber-300 font-bold flex items-center gap-1">
+              <WifiOff className="w-2.5 h-2.5" />
+              {pendingCount > 0 ? `Buffer (${pendingCount})` : "Penyangga Lokal"}
             </span>
           )}
           <span className="text-cyan-400/90 flex items-center gap-0.5 border-l border-slate-700/80 pl-1.5" title="Firebase Realtime Database (jrz-score)">
@@ -135,10 +144,12 @@ export function ConnectionStatusIndicator({
             </h4>
             <span className="text-[10px] font-mono text-slate-400">
               Mode Sistem:{" "}
-              <span className={isCloudOnline ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+              <span className={isCloudOnline ? "text-emerald-400 font-bold" : "text-amber-400 font-bold"}>
                 {isCloudOnline
-                  ? "Firebase Realtime Database Online Aktif"
-                  : "Menunggu Koneksi Internet & Firebase"}
+                  ? hasPending
+                    ? `Menyinkronkan ${pendingCount} Data Tertunda ke Firebase RTDB`
+                    : "Firebase Realtime Database Online Aktif"
+                  : `Penyangga Lokal Aktif (${pendingCount} Antrean Auto-Sync saat Pulih)`}
               </span>
             </span>
           </div>
@@ -151,7 +162,7 @@ export function ConnectionStatusIndicator({
           >
             <Database className="w-3.5 h-3.5 text-cyan-400" />
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300">
-              Firebase RTDB ({firebaseStatus.syncCount || 0} sync)
+              Firebase RTDB ({firebaseStatus.syncCount || 0} sync{pendingCount > 0 ? ` • ${pendingCount} antre` : ""})
             </span>
           </div>
 
@@ -159,27 +170,27 @@ export function ConnectionStatusIndicator({
             className={`flex items-center gap-1.5 border px-2.5 py-1 rounded-lg ${
               isCloudOnline
                 ? "bg-emerald-950/30 border-emerald-500/20"
-                : "bg-rose-950/30 border-rose-500/30"
+                : "bg-amber-950/30 border-amber-500/30"
             }`}
           >
             <span className="relative flex h-2 w-2">
               <span
                 className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                  isCloudOnline ? "bg-emerald-400" : "bg-rose-400"
+                  isCloudOnline ? "bg-emerald-400" : "bg-amber-400"
                 }`}
               ></span>
               <span
                 className={`relative inline-flex rounded-full h-2 w-2 ${
-                  isCloudOnline ? "bg-emerald-500" : "bg-rose-500"
+                  isCloudOnline ? "bg-emerald-500" : "bg-amber-500"
                 }`}
               ></span>
             </span>
             <span
               className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
-                isCloudOnline ? "text-emerald-400" : "text-rose-400"
+                isCloudOnline ? "text-emerald-400" : "text-amber-300"
               }`}
             >
-              {isCloudOnline ? "Firebase Online Aktif" : "Terputus"}
+              {isCloudOnline ? "Firebase Online Aktif" : "Penyangga Lokal (Auto-Sync)"}
             </span>
           </div>
         </div>

@@ -7,9 +7,14 @@ import React, { useEffect, useState } from "react";
 import { MatchSimHub } from "./components/MatchSimHub";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { authService, DEFAULT_USERS } from "./services/authService";
-import { subscribeToConnectionStatus } from "./services/firebase";
+import {
+  subscribeToConnectionStatus,
+  subscribeToPendingSync,
+  flushPendingCloudSync,
+  PendingSyncSummary
+} from "./services/firebase";
 import { UserAccount } from "./types";
-import { WifiOff, RefreshCw, Database } from "lucide-react";
+import { WifiOff, RefreshCw, CheckCircle2, CloudUpload, X } from "lucide-react";
 
 import { MobileViewportScaler } from "./components/MobileViewportScaler";
 
@@ -23,6 +28,14 @@ export default function App() {
   );
   const [firebaseConnected, setFirebaseConnected] = useState<boolean>(true);
   const [hasCheckedFirebase, setHasCheckedFirebase] = useState<boolean>(false);
+  const [syncSummary, setSyncSummary] = useState<PendingSyncSummary>({
+    pendingCount: 0,
+    isSyncing: false,
+    lastSyncedAt: 0,
+    connected: true
+  });
+  const [justSyncedCount, setJustSyncedCount] = useState<number>(0);
+  const [bannerDismissed, setBannerDismissed] = useState<boolean>(false);
 
   const [themeMode, setThemeMode] = React.useState<"LED_ARENA" | "LIGHT_CONTRAST">(() => {
     if (typeof window !== "undefined") {
@@ -44,19 +57,44 @@ export default function App() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onOnline = () => setBrowserOnline(true);
-    const onOffline = () => setBrowserOnline(false);
+    const onOffline = () => {
+      setBrowserOnline(false);
+      setBannerDismissed(false);
+    };
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onOffline);
 
     const unsubFb = subscribeToConnectionStatus((connected) => {
       setFirebaseConnected(connected);
       setHasCheckedFirebase(true);
+      if (!connected) {
+        setBannerDismissed(false);
+      }
     });
+
+    const unsubPending = subscribeToPendingSync((summary) => {
+      setSyncSummary(summary);
+    });
+
+    let syncedClearTimer: ReturnType<typeof setTimeout> | null = null;
+    const handleSyncedEvent = (e: Event) => {
+      const detail = (e as CustomEvent)?.detail;
+      const flushed = Number(detail?.flushed) || 0;
+      if (flushed > 0) {
+        setJustSyncedCount(flushed);
+        if (syncedClearTimer) clearTimeout(syncedClearTimer);
+        syncedClearTimer = setTimeout(() => setJustSyncedCount(0), 5000);
+      }
+    };
+    window.addEventListener("jrz_firebase_synced", handleSyncedEvent);
 
     return () => {
       window.removeEventListener("online", onOnline);
       window.removeEventListener("offline", onOffline);
+      window.removeEventListener("jrz_firebase_synced", handleSyncedEvent);
+      if (syncedClearTimer) clearTimeout(syncedClearTimer);
       unsubFb();
+      unsubPending();
     };
   }, []);
 
@@ -87,7 +125,10 @@ export default function App() {
     }
   }, [themeMode]);
 
-  const isOfflineBlocked = !browserOnline || (hasCheckedFirebase && !firebaseConnected);
+  const isDisconnected = !browserOnline || (hasCheckedFirebase && !firebaseConnected);
+  const showSyncingBanner = !isDisconnected && (syncSummary.isSyncing || syncSummary.pendingCount > 0);
+  const showDisconnectedBanner = isDisconnected && !bannerDismissed;
+  const showRecoveredBanner = !isDisconnected && !showSyncingBanner && justSyncedCount > 0;
 
   return (
     <div
@@ -97,30 +138,79 @@ export default function App() {
           : "bg-[#070d1e] text-slate-100 theme-dark"
       }`}
     >
-      {isOfflineBlocked && (
-        <div className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-[#091229] border-2 border-rose-500/80 rounded-2xl p-6 text-center shadow-[0_0_50px_rgba(244,63,94,0.3)] space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-400">
-              <WifiOff className="w-8 h-8 animate-pulse" />
-            </div>
-            <div className="space-y-1.5">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-mono font-bold uppercase tracking-widest">
-                <Database className="w-3 h-3" /> MODE ONLINE FIREBASE SAJA
+      {showDisconnectedBanner && (
+        <div className="sticky top-0 z-[9990] w-full bg-amber-950/95 border-b border-amber-500/60 backdrop-blur-md px-4 py-2 text-amber-100 shadow-lg">
+          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="p-1.5 rounded-lg bg-amber-500/20 border border-amber-400/40 text-amber-300 shrink-0">
+                <WifiOff className="w-4 h-4 animate-pulse" />
               </span>
-              <h2 className="text-lg font-black text-white uppercase tracking-wide">
-                Koneksi Internet &amp; Firebase Diperlukan
-              </h2>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Aplikasi JRZ SCORE tidak mendukung mode offline. Pastikan perangkat terhubung ke internet agar dapat berkomunikasi dengan <strong>Firebase Realtime Database (jrz-score)</strong>.
-              </p>
+              <div>
+                <span className="font-bold text-amber-200">
+                  Koneksi Internet / Firebase Terputus
+                </span>
+                <span className="hidden sm:inline text-amber-100/80 ml-1.5">
+                  — Aplikasi tetap berjalan normal. Seluruh data &amp; skor disimpan aman di perangkat dan otomatis disinkronkan ke Firebase RTDB saat koneksi stabil.
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 ml-auto">
+              {syncSummary.pendingCount > 0 && (
+                <span className="px-2 py-0.5 rounded bg-amber-500/25 border border-amber-400/40 font-mono font-bold text-[11px] text-amber-200">
+                  Antrean Sync: {syncSummary.pendingCount}
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => flushPendingCloudSync().catch(() => {})}
+                className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Coba Sinkronkan</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setBannerDismissed(true)}
+                aria-label="Tutup pemberitahuan koneksi"
+                className="p-1 rounded hover:bg-amber-800/60 text-amber-200/80 hover:text-white cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSyncingBanner && (
+        <div className="sticky top-0 z-[9990] w-full bg-cyan-950/95 border-b border-cyan-500/50 backdrop-blur-md px-4 py-2 text-cyan-100 shadow-md">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2">
+              <CloudUpload className="w-4 h-4 text-cyan-300 animate-bounce" />
+              <span className="font-bold">
+                Koneksi Pulih — Menyinkronkan {syncSummary.pendingCount} perubahan tertunda ke Firebase Realtime Database (jrz-score)...
+              </span>
+            </div>
+            <RefreshCw className="w-3.5 h-3.5 text-cyan-300 animate-spin" />
+          </div>
+        </div>
+      )}
+
+      {showRecoveredBanner && (
+        <div className="sticky top-0 z-[9990] w-full bg-emerald-950/95 border-b border-emerald-500/50 backdrop-blur-md px-4 py-2 text-emerald-100 shadow-md">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span className="font-bold">
+                Koneksi Stabil — {justSyncedCount} data pertandingan telah tersinkron &amp; tersimpan real-time di Firebase RTDB.
+              </span>
             </div>
             <button
               type="button"
-              onClick={() => window.location.reload()}
-              className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg"
+              onClick={() => setJustSyncedCount(0)}
+              aria-label="Tutup pemberitahuan sinkronisasi"
+              className="p-1 rounded hover:bg-emerald-800/60 text-emerald-200/80 hover:text-white cursor-pointer"
             >
-              <RefreshCw className="w-4 h-4" />
-              <span>Hubungkan Ulang ke Firebase</span>
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

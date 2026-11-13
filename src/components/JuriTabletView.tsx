@@ -25,7 +25,7 @@ import {
   RINCIAN_JURUS_TUNGGAL 
 } from '../services/ipsiRules';
 import { notificationService } from '../services/notificationService';
-import { subscribeToConnectionStatus } from '../services/firebase';
+import { subscribeToConnectionStatus, isCloudConnectionReady } from '../services/firebase';
 
 interface JuriTabletViewProps {
   partai: Partai | null;
@@ -45,13 +45,12 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
   const [kesalahanRincian, setKesalahanRincian] = useState<Record<number, number>>({});
   const [kemantapan, setKemantapan] = useState<number>(0.080);
   const [isLocked, setIsLocked] = useState<boolean>(false);
+  const [isPendingSync, setIsPendingSync] = useState<boolean>(false);
   const [showRincianJurus, setShowRincianJurus] = useState<boolean>(false);
   const [showSuccessToast, setShowSuccessToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>('');
 
-  const [isOnline, setIsOnline] = useState<boolean>(() =>
-    typeof navigator !== 'undefined' ? navigator.onLine !== false : true
-  );
+  const [isOnline, setIsOnline] = useState<boolean>(() => isCloudConnectionReady());
 
   useEffect(() => {
     const unsub = subscribeToConnectionStatus((connected) => {
@@ -59,6 +58,28 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
     });
     return () => unsub();
   }, []);
+
+  // Pulihkan antrean nilai tablet lokal & otomatis kirim ulang saat koneksi pulih
+  useEffect(() => {
+    if (!partai?.id) return;
+    const draftKey = `jrz_juri_tablet_pending_${partai.id}_${juriId}`;
+    try {
+      const rawDraft = localStorage.getItem(draftKey);
+      if (rawDraft) {
+        const draft: NilaiJuri = JSON.parse(rawDraft);
+        if (isOnline) {
+          onSubmitJuriScore({ ...draft, updatedAt: Date.now() });
+          localStorage.removeItem(draftKey);
+          setIsPendingSync(false);
+          setToastMessage(`Koneksi pulih — Nilai Juri #${juriId} tersinkron real-time ke Firebase!`);
+          setShowSuccessToast(true);
+          setTimeout(() => setShowSuccessToast(false), 3000);
+        } else {
+          setIsPendingSync(true);
+        }
+      }
+    } catch {}
+  }, [isOnline, partai?.id, juriId]);
 
   // Load existing score for this juri if available
   useEffect(() => {
@@ -71,10 +92,29 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
         setKesalahanRincian(existing.kesalahanRincian);
       }
     } else {
-      setKesalahanGerak(0);
-      setKesalahanRincian({});
-      setKemantapan(0.080);
-      setIsLocked(false);
+      const draftKey = partai?.id ? `jrz_juri_tablet_pending_${partai.id}_${juriId}` : '';
+      let restored = false;
+      if (draftKey) {
+        try {
+          const rawDraft = localStorage.getItem(draftKey);
+          if (rawDraft) {
+            const draft: NilaiJuri = JSON.parse(rawDraft);
+            setKesalahanGerak(draft.kesalahanGerak || 0);
+            setKemantapan(draft.kemantapanSkor || 0.080);
+            setKesalahanRincian(draft.kesalahanRincian || {});
+            setIsLocked(Boolean(draft.isLocked));
+            setIsPendingSync(true);
+            restored = true;
+          }
+        } catch {}
+      }
+      if (!restored) {
+        setKesalahanGerak(0);
+        setKesalahanRincian({});
+        setKemantapan(0.080);
+        setIsLocked(false);
+        setIsPendingSync(false);
+      }
     }
   }, [partai?.id, juriId]);
 
@@ -121,15 +161,8 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
     }
   };
 
-  // Submit score strictly online via Firebase
+  // Submit score with connection resilience (immediate cloud sync when online, safe local queue when offline)
   const handleSubmitScore = () => {
-    if (!isOnline) {
-      setToastMessage('Koneksi internet & Firebase terputus. Tidak dapat mengirim nilai dalam mode offline.');
-      setShowSuccessToast(true);
-      setTimeout(() => setShowSuccessToast(false), 3500);
-      return;
-    }
-
     const payload: NilaiJuri = {
       juriId,
       juriNama: `Juri ${juriId}`,
@@ -142,11 +175,28 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
       updatedAt: Date.now(),
     };
 
+    const draftKey = `jrz_juri_tablet_pending_${partai.id}_${juriId}`;
+    if (!isOnline) {
+      try {
+        localStorage.setItem(draftKey, JSON.stringify(payload));
+      } catch {}
+      setIsPendingSync(true);
+    } else {
+      try {
+        localStorage.removeItem(draftKey);
+      } catch {}
+      setIsPendingSync(false);
+    }
+
     onSubmitJuriScore(payload);
     setIsLocked(true);
-    setToastMessage(`Nilai Juri #${juriId} (${totalSkor.toFixed(3)}) Berhasil Diunggah ke Firebase!`);
+    setToastMessage(
+      isOnline
+        ? `Nilai Juri #${juriId} (${totalSkor.toFixed(3)}) Berhasil Diunggah ke Firebase!`
+        : `Nilai Juri #${juriId} (${totalSkor.toFixed(3)}) Disimpan Lokal — Otomatis Sinkron saat Koneksi Pulih!`
+    );
     setShowSuccessToast(true);
-    setTimeout(() => setShowSuccessToast(false), 2500);
+    setTimeout(() => setShowSuccessToast(false), 3000);
 
     notificationService.addNotification(
       'score',
@@ -166,12 +216,12 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
       {/* Online Firebase Status Banner */}
       <div className={`p-3 rounded-2xl border-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
         !isOnline 
-          ? 'bg-rose-50 border-rose-500 text-rose-950' 
+          ? 'bg-amber-50 border-amber-500 text-amber-950' 
           : 'bg-emerald-50 border-emerald-500 text-emerald-950'
       }`}>
         <div className="flex items-center gap-2.5">
           {!isOnline ? (
-            <div className="w-8 h-8 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold shrink-0 animate-pulse">
+            <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shrink-0 animate-pulse">
               <WifiOff className="w-4 h-4" />
             </div>
           ) : (
@@ -181,11 +231,11 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
           )}
           <div>
             <div className="font-extrabold text-sm flex items-center gap-2">
-              <span>{isOnline ? 'Online (Terhubung ke Firebase Realtime Database)' : 'Koneksi Terputus (Mode Online Wajib)'}</span>
+              <span>{isOnline ? 'Online (Terhubung ke Firebase Realtime Database)' : 'Koneksi Terputus (Mode Penyangga Lokal Aktif)'}</span>
             </div>
             <p className="text-[11px] opacity-80 mt-0.5">
               {!isOnline 
-                ? 'Aplikasi ini hanya berjalan online dengan Firebase. Sambungkan internet untuk mengirim penilaian.' 
+                ? 'Anda tetap dapat menilai & mengirim nilai. Skor tersimpan aman di perangkat dan otomatis disinkronkan ke Firebase saat koneksi pulih.' 
                 : 'Skor yang dimasukkan langsung tersimpan dan tersinkronkan secara real-time melalui Firebase.'}
             </p>
           </div>
@@ -476,21 +526,30 @@ export const JuriTabletView: React.FC<JuriTabletViewProps> = ({
             {!isLocked ? (
               <button
                 onClick={handleSubmitScore}
-                disabled={!isOnline}
-                className={`w-full sm:w-auto px-8 py-4 font-black text-base uppercase tracking-wider rounded-xl shadow-lg flex items-center justify-center gap-2 transition-transform ${
+                className={`w-full sm:w-auto px-8 py-4 font-black text-base uppercase tracking-wider rounded-xl shadow-lg flex items-center justify-center gap-2 transition-transform cursor-pointer active:scale-95 ${
                   !isOnline
-                    ? 'bg-red-900/70 text-red-200 cursor-not-allowed opacity-70'
-                    : 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950 cursor-pointer active:scale-95'
+                    ? 'bg-amber-400 hover:bg-amber-300 text-zinc-950'
+                    : 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950'
                 }`}
               >
                 <Send className="w-5 h-5 fill-current" />
-                <span>{isOnline ? 'Kirim Nilai ke Firebase' : 'Koneksi Firebase Terputus'}</span>
+                <span>{isOnline ? 'Kirim Nilai ke Firebase' : 'Simpan Lokal (Auto-Sync Firebase)'}</span>
               </button>
             ) : (
               <div className="flex items-center gap-2">
-                <div className="px-4 py-3 border rounded-xl text-xs font-bold flex items-center gap-2 bg-emerald-950 border-emerald-500 text-emerald-300">
+                <div
+                  className={`px-4 py-3 border rounded-xl text-xs font-bold flex items-center gap-2 ${
+                    isPendingSync || !isOnline
+                      ? 'bg-amber-950 border-amber-500 text-amber-200'
+                      : 'bg-emerald-950 border-emerald-500 text-emerald-300'
+                  }`}
+                >
                   <CheckCircle className="w-5 h-5" />
-                  <span>Nilai Terkirim ke Firebase & Terkunci</span>
+                  <span>
+                    {isPendingSync || !isOnline
+                      ? 'Tersimpan Lokal & Terkunci (Menunggu Auto-Sync)'
+                      : 'Nilai Terkirim ke Firebase & Terkunci'}
+                  </span>
                 </div>
                 <button
                   onClick={handleUnlock}
