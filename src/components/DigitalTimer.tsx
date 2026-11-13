@@ -1,0 +1,293 @@
+import React, { useEffect, useState } from "react";
+import { 
+  Play, 
+  Pause, 
+  RotateCcw, 
+  Plus, 
+  Minus, 
+  Clock, 
+  AlertCircle, 
+  Volume2, 
+  VolumeX 
+} from "lucide-react";
+import { MatchState, MatchStatus } from "../types";
+import { GongIcon } from "./icons/GongIcon";
+import { sound } from "../utils/sound";
+
+interface DigitalTimerProps {
+  state: MatchState;
+  onTimerCommand?: (command: "START" | "PAUSE" | "ADD_10" | "SUB_10") => void;
+  onUpdateMetadata?: (data: Partial<MatchState>) => void;
+  onResetMatch?: () => void;
+  readOnly?: boolean;
+  size?: "normal" | "large";
+}
+
+export function DigitalTimer({ state, onTimerCommand, onUpdateMetadata, onResetMatch, readOnly = false, size = "normal" }: DigitalTimerProps) {
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [pulse, setPulse] = useState(false);
+
+  const prevTimeLeftRef = React.useRef(state.timeLeft);
+
+  // Trigger buzzer sound when timeLeft hits 0 (akhir babak)
+  useEffect(() => {
+    if (state.timeLeft === 0 && prevTimeLeftRef.current > 0) {
+      if (soundEnabled) sound.playBuzzer();
+    }
+    prevTimeLeftRef.current = state.timeLeft;
+    
+    // Toggle pulse effect when running
+    if (state.status === MatchStatus.RUNNING) {
+      const interval = setInterval(() => {
+        setPulse(p => !p);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setPulse(false);
+    }
+  }, [state.timeLeft, state.status, soundEnabled]);
+
+  const handleStart = () => {
+    // Sound buzzer hanya berbunyi saat babak dimulai dari awal (BUKAN saat resume/lanjutkan dari pause)
+    const roundDur = state.roundDuration || 120;
+    const isResuming = (state.status === MatchStatus.PAUSED || state.status === MatchStatus.RUNNING) && state.timeLeft > 0 && state.timeLeft < roundDur;
+    if (!isResuming && soundEnabled) {
+      sound.playBuzzer();
+    }
+    if (onTimerCommand) onTimerCommand("START");
+  };
+
+  const handlePause = () => {
+    // Jeda / pause: TANPA SUARA APAPUN (SILENT)
+    if (onTimerCommand) onTimerCommand("PAUSE");
+  };
+
+  const handleAdjust = (command: "ADD_10" | "SUB_10") => {
+    playTone(880, 0.08); // high tick chime
+    if (onTimerCommand) onTimerCommand(command);
+  };
+
+  const formatMinutesAndSeconds = (totalSeconds: number) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return {
+      minutesStr: minutes.toString().padStart(2, "0"),
+      secondsStr: seconds.toString().padStart(2, "0")
+    };
+  };
+
+  const { minutesStr, secondsStr } = formatMinutesAndSeconds(state.timeLeft);
+
+  // Calculate percentage for progress dial/line
+  const percentage = state.roundDuration > 0 
+    ? (state.timeLeft / state.roundDuration) * 100 
+    : 0;
+
+  // Custom styling elements based on match state
+  const isRunning = state.status === MatchStatus.RUNNING;
+  const isFinished = state.timeLeft === 0 && state.status !== MatchStatus.RUNNING;
+
+  if (readOnly) {
+    return (
+      <div 
+        className="flex items-center justify-center w-full h-full select-none"
+        id="digital-timer-component-root-readonly"
+      >
+        {/* LED Timer digits with responsive size to sit centered on all screens */}
+        <div 
+          className="font-digital select-none tracking-normal flex items-center justify-center gap-0.5 text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.45)] text-[2.5rem] sm:text-[3rem] md:text-[3.25rem] lg:text-[3.75rem] xl:text-[4.25rem] leading-none"
+          id="digital-timer-clockface-readonly"
+        >
+          <span>{minutesStr}</span>
+          <span className={`transition-opacity duration-300 ${pulse ? "opacity-30" : "opacity-100"}`}>:</span>
+          <span>{secondsStr}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className={`${
+        readOnly 
+          ? "bg-transparent p-0" 
+          : "bg-slate-950 p-5 border border-slate-800 rounded-2xl shadow-2xl"
+      } flex flex-col items-center justify-between relative overflow-hidden w-full`}
+      id="digital-timer-component-root"
+    >
+      {/* Background Matrix/Grid Styling for modern tech feel */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/5 via-transparent to-transparent opacity-40 pointer-events-none" />
+
+      {/* TOP HEADER: REMOVED as requested */}
+
+      {/* CENTER GLOWING LCD DISPLAYS */}
+      <div className={`relative flex flex-col items-center justify-center bg-slate-950/90 border border-slate-900/80 rounded-xl w-full text-center shadow-inner z-10 ${
+        size === "large" ? "my-2 py-6 px-5" : "my-1 py-2 px-3"
+      }`}>
+        
+        {/* LED Timer digits */}
+        <div 
+          className={`font-digital select-none tracking-normal flex items-center justify-center gap-0.5 ${
+            isRunning 
+              ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.6)]" 
+              : isFinished 
+              ? "text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,0.6)] animate-pulse" 
+              : "text-amber-500 drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]"
+          }`}
+          style={{ fontSize: size === "large" ? "4.5rem" : "1.75rem", lineHeight: size === "large" ? "4.5rem" : "1.75rem" }}
+          id="digital-timer-clockface"
+        >
+          <span>{minutesStr}</span>
+          <span className={`transition-opacity duration-300 ${pulse ? "opacity-30" : "opacity-100"}`}>:</span>
+          <span>{secondsStr}</span>
+        </div>
+
+        {/* Round active standard indicator */}
+        <div className={size === "large" ? "mt-4 flex items-center justify-center" : "mt-1 flex items-center justify-center"}>
+          <div className={
+            size === "large"
+              ? "bg-amber-500/15 border-2 border-amber-500/35 px-6 py-2 rounded-2xl text-amber-400 text-lg md:text-xl font-black font-sans uppercase tracking-widest shadow-[0_0_15px_rgba(245,158,11,0.2)] animate-pulse"
+              : "bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full text-amber-400 text-[10px] font-extrabold font-sans"
+          }>
+            Babak {state.activeRound}
+          </div>
+        </div>
+      </div>
+
+      {/* TIMER PLAY/PAUSE/ADJUST CONTROLS */}
+      {!readOnly && (
+        <div className="w-full grid grid-cols-1 gap-3.5 mt-4 z-10 shrink-0">
+          
+          {/* Main large play/pause button */}
+          <div className="flex items-center gap-2.5">
+            {isRunning ? (
+              <button
+                onClick={handlePause}
+                className="flex-grow bg-amber-50 border border-amber-300 text-slate-950 font-sans font-black py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all transform hover:bg-white active:scale-95 text-xs text-center shadow-[0_4px_12px_rgba(245,158,11,0.2)] cursor-pointer uppercase font-black"
+                id="timer-control-btn-pause"
+              >
+                <Pause className="w-4 h-4 fill-slate-950 text-slate-950" />
+                <span>JEDA (PAUSE)</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleStart}
+                disabled={state.status === MatchStatus.FINISHED}
+                className="flex-grow bg-emerald-500 hover:bg-emerald-400 disabled:opacity-30 text-slate-950 font-sans font-black py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all transform active:scale-95 text-xs text-center shadow-[0_4px_12px_rgba(0, 128, 0,0.25)] cursor-pointer uppercase font-black"
+                id="timer-control-btn-start"
+              >
+                <Play className="w-4 h-4 fill-slate-950 text-slate-950" />
+                <span>MULAI (START)</span>
+              </button>
+            )}
+          </div>
+
+          {/* Row of Time adjustments and Reset */}
+          <div className="grid grid-cols-3 gap-2">
+            
+            <button 
+              onClick={() => handleAdjust("SUB_10")}
+              className="text-[10px] py-1.5 font-mono bg-slate-900 border border-slate-800 text-slate-300 rounded-lg hover:bg-slate-850 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1 cursor-pointer"
+              title="Keluar 10 detik"
+              id="timer-adjust-sub"
+            >
+              <Minus className="w-3 h-3 text-red-500" />
+              <span>-10s</span>
+            </button>
+            
+            <button 
+              onClick={() => handleAdjust("ADD_10")}
+              className="text-[10px] py-1.5 font-mono bg-slate-900 border border-slate-800 text-slate-300 rounded-lg hover:bg-slate-850 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1 cursor-pointer"
+              title="Tambak 10 detik"
+              id="timer-adjust-add"
+            >
+              <Plus className="w-3 h-3 text-emerald-400" />
+              <span>+10s</span>
+            </button>
+
+            <button
+              onClick={() => {
+                playTone(220, 0.4); // alarm warning tone
+                if (confirm("🚨 SET ULANG PARTAI? Semua poin babak, pelanggaran & log tanding pada partai saat ini akan dibersihkan permanen!")) {
+                  if (onResetMatch) onResetMatch();
+                }
+              }}
+              className="text-[10px] py-1.5 font-mono bg-red-950/40 border border-red-900/30 text-red-400 hover:bg-red-950/80 hover:text-red-300 rounded-lg transition-all active:scale-95 flex items-center justify-center gap-1 cursor-pointer"
+              title="Reset Partai"
+              id="timer-reset-match-btn"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>RESET</span>
+            </button>
+
+          </div>
+
+          {/* Row of Round dropdown, Timer dropdown, and Gong button */}
+          <div className="flex items-center justify-between gap-1.5 pt-1 border-t border-slate-800/80">
+            {/* Dropdown Babak (2 & 3 Babak) */}
+            <div className="flex items-center gap-1 bg-slate-900 border border-cyan-500/40 rounded-lg px-2 py-1 text-[10px]">
+              <span className="font-mono font-bold text-cyan-300">BABAK:</span>
+              <select
+                aria-label="Pilih Jumlah Babak"
+                value={state.roundCount || 3}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (onUpdateMetadata) {
+                    onUpdateMetadata({
+                      roundCount: val,
+                      activeRound: Math.min(state.activeRound || 1, val)
+                    });
+                  }
+                }}
+                className="bg-transparent font-mono font-bold text-amber-300 focus:outline-none cursor-pointer"
+              >
+                <option value={2} className="bg-slate-900 text-amber-300 font-bold">2 BABAK</option>
+                <option value={3} className="bg-slate-900 text-amber-300 font-bold">3 BABAK</option>
+              </select>
+            </div>
+
+            {/* Dropdown Durasi Timer (1 s/d 3 Menit) */}
+            <div className="flex items-center gap-1 bg-slate-900 border border-cyan-500/40 rounded-lg px-2 py-1 text-[10px]">
+              <Clock className="w-3 h-3 text-cyan-400" />
+              <select
+                aria-label="Pilih Durasi Timer"
+                value={state.roundDuration || 120}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (onUpdateMetadata) {
+                    onUpdateMetadata({
+                      roundDuration: val,
+                      timeLeft: state.status === MatchStatus.IDLE ? val : state.timeLeft
+                    });
+                  }
+                }}
+                className="bg-transparent font-mono font-bold text-emerald-300 focus:outline-none cursor-pointer"
+              >
+                <option value={60} className="bg-slate-900 text-emerald-300 font-bold">1M (01:00)</option>
+                <option value={75} className="bg-slate-900 text-emerald-300 font-bold">1M 15D</option>
+                <option value={90} className="bg-slate-900 text-emerald-300 font-bold">1.5M (01:30)</option>
+                <option value={105} className="bg-slate-900 text-emerald-300 font-bold">1M 45D</option>
+                <option value={120} className="bg-slate-900 text-emerald-300 font-bold">2M (02:00)</option>
+                <option value={150} className="bg-slate-900 text-emerald-300 font-bold">2.5M (02:30)</option>
+                <option value={180} className="bg-slate-900 text-emerald-300 font-bold">3M (03:00)</option>
+              </select>
+            </div>
+
+            {/* Menu Sound Buzzer (Hanya Icon) */}
+            <button
+              type="button"
+              onClick={() => sound.playBuzzer()}
+              className="p-1 px-2 rounded-lg bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold border border-yellow-300 transition-all cursor-pointer flex items-center justify-center shrink-0"
+              title="Bunyikan Sound Buzzer"
+              aria-label="Sound Buzzer"
+            >
+              <GongIcon className="w-3.5 h-3.5 text-slate-950" />
+            </button>
+          </div>
+
+        </div>
+      )}
+
+    </div>
+  );
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Remix JRZ Score full Firebase",
+  "description": "Digital Scoring IPSI Untuk Penjurian  Pertandingan Pencak Silat Kategori Tanding",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "permissions": []
+}

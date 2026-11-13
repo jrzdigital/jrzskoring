@@ -1,0 +1,254 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useEffect, useState } from "react";
+import { Tv, Laptop, Shield, User, Activity, Database, WifiOff } from "lucide-react";
+import { rtdbScoringEngine, FirebaseSyncStatus } from "../services/rtdbScoringEngine";
+
+interface DeviceStatus {
+  active: boolean;
+  ip: string;
+  lastSeen: number;
+}
+
+interface ConnectionStatusIndicatorProps {
+  deviceId: "monitor" | "sekretaris" | "dewan" | "juri1" | "juri2" | "juri3";
+  deviceConnections?: {
+    [key: string]: DeviceStatus;
+  };
+  compact?: boolean;
+}
+
+export function ConnectionStatusIndicator({
+  deviceId,
+  deviceConnections = {},
+  compact = false
+}: ConnectionStatusIndicatorProps) {
+  const [browserOnline, setBrowserOnline] = useState<boolean>(() =>
+    typeof navigator !== "undefined" ? navigator.onLine !== false : true
+  );
+  const [firebaseStatus, setFirebaseStatus] = useState<FirebaseSyncStatus>(() => rtdbScoringEngine.getStatus());
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onOnline = () => setBrowserOnline(true);
+    const onOffline = () => setBrowserOnline(false);
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    rtdbScoringEngine.initDevice(deviceId, deviceId.toUpperCase());
+    const unsub = rtdbScoringEngine.subscribeStatus((status) => {
+      setFirebaseStatus(status);
+    });
+    return () => unsub();
+  }, [deviceId]);
+
+  const rtdbDevices = rtdbScoringEngine.getActiveDevices();
+  const mergedConnections: { [key: string]: DeviceStatus } = { ...deviceConnections };
+  Object.keys(rtdbDevices).forEach((key) => {
+    if (rtdbDevices[key] && rtdbDevices[key].active) {
+      mergedConnections[key] = {
+        active: true,
+        ip: rtdbDevices[key].ip || "Firebase RTDB",
+        lastSeen: rtdbDevices[key].lastSeen || Date.now()
+      };
+    }
+  });
+
+  const deviceList = [
+    { key: "sekretaris", label: "Sekretaris", icon: Laptop, color: "text-purple-400" },
+    { key: "monitor", label: "Monitor", icon: Tv, color: "text-emerald-400" },
+    { key: "dewan", label: "Dewan", icon: Shield, color: "text-amber-400" },
+    { key: "juri1", label: "Juri 1", icon: User, color: "text-red-400" },
+    { key: "juri2", label: "Juri 2", icon: User, color: "text-blue-400" },
+    { key: "juri3", label: "Juri 3", icon: User, color: "text-pink-400" }
+  ];
+
+  const isCloudOnline = browserOnline && firebaseStatus.connected;
+
+  if (compact) {
+    const activeCount = Object.values(mergedConnections).filter((d) => d.active).length;
+    const totalCount = deviceList.length;
+
+    return (
+      <div
+        id={`sync-compact-${deviceId}`}
+        className="flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur border border-purple-900/30 rounded-full text-xs"
+        title={
+          isCloudOnline
+            ? "Online: Firebase Realtime Database Terhubung"
+            : "Koneksi Firebase Terputus: Memerlukan Internet Aktif"
+        }
+      >
+        <span className="relative flex h-2 w-2">
+          <span
+            className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+              isCloudOnline ? "bg-emerald-400" : "bg-rose-400"
+            }`}
+          ></span>
+          <span
+            className={`relative inline-flex rounded-full h-2 w-2 ${
+              isCloudOnline ? "bg-emerald-500" : "bg-rose-500"
+            }`}
+          ></span>
+        </span>
+        <span className="font-mono text-[10px] text-slate-300 flex items-center gap-1.5">
+          {isCloudOnline ? (
+            <>
+              Firebase: <span className="text-emerald-400 font-bold">{Math.max(1, activeCount)}</span>/{totalCount}
+            </>
+          ) : (
+            <span className="text-rose-400 font-bold flex items-center gap-1">
+              <WifiOff className="w-2.5 h-2.5" /> Offline Terblokir
+            </span>
+          )}
+          <span className="text-cyan-400/90 flex items-center gap-0.5 border-l border-slate-700/80 pl-1.5" title="Firebase Realtime Database (jrz-score)">
+            <Database className="w-2.5 h-2.5 text-cyan-400" />
+            <span className="text-[9px] font-bold">RTDB</span>
+          </span>
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      id={`sync-panel-${deviceId}`}
+      className="p-4 bg-slate-950/80 backdrop-blur-md border border-purple-500/20 rounded-xl shadow-xl max-w-4xl mx-auto w-full"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-purple-900/40 pb-3 mb-3">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-purple-950/40 rounded-lg border border-purple-500/20">
+            <Activity className="w-4 h-4 text-[#facc15] animate-pulse" />
+          </div>
+          <div>
+            <h4 className="text-sm font-sans font-black tracking-tight text-slate-200 uppercase leading-none">
+              Status Sinkronisasi Perangkat &amp; Nilai Real-Time
+            </h4>
+            <span className="text-[10px] font-mono text-slate-400">
+              Mode Sistem:{" "}
+              <span className={isCloudOnline ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                {isCloudOnline
+                  ? "Firebase Realtime Database Online Aktif"
+                  : "Menunggu Koneksi Internet & Firebase"}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <div
+            className="flex items-center gap-1.5 bg-cyan-950/30 border border-cyan-500/30 px-2.5 py-1 rounded-lg"
+            title="Sinkronisasi Real-Time ke Firebase Realtime Database (jrz-score)"
+          >
+            <Database className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300">
+              Firebase RTDB ({firebaseStatus.syncCount || 0} sync)
+            </span>
+          </div>
+
+          <div
+            className={`flex items-center gap-1.5 border px-2.5 py-1 rounded-lg ${
+              isCloudOnline
+                ? "bg-emerald-950/30 border-emerald-500/20"
+                : "bg-rose-950/30 border-rose-500/30"
+            }`}
+          >
+            <span className="relative flex h-2 w-2">
+              <span
+                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                  isCloudOnline ? "bg-emerald-400" : "bg-rose-400"
+                }`}
+              ></span>
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${
+                  isCloudOnline ? "bg-emerald-500" : "bg-rose-500"
+                }`}
+              ></span>
+            </span>
+            <span
+              className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
+                isCloudOnline ? "text-emerald-400" : "text-rose-400"
+              }`}
+            >
+              {isCloudOnline ? "Firebase Online Aktif" : "Terputus"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+        {deviceList.map((dev) => {
+          const status = mergedConnections[dev.key] || { active: false, ip: "-", lastSeen: 0 };
+          const isCurrent = dev.key === deviceId;
+          const isActive = status.active || isCurrent;
+          const IconComponent = dev.icon;
+
+          return (
+            <div
+              key={dev.key}
+              className={`relative p-2.5 rounded-lg border flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] ${
+                isCurrent
+                  ? "bg-purple-950/30 border-purple-500/50 shadow-purple-500/5 shadow-inner"
+                  : isActive
+                    ? "bg-slate-900/40 border-slate-800"
+                    : "bg-slate-900/10 border-slate-950/60 opacity-60"
+              }`}
+            >
+              <div className="flex items-start justify-between mb-1.5">
+                <div className={`p-1 rounded bg-slate-950/60 border border-slate-800 ${dev.color}`}>
+                  <IconComponent className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex items-center">
+                  <span className="relative flex h-2 w-2">
+                    {isActive ? (
+                      <>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      </>
+                    ) : (
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-700"></span>
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] font-sans font-black text-slate-100 uppercase tracking-tight">
+                    {dev.label}
+                  </span>
+                  {isCurrent && (
+                    <span className="text-[8px] bg-[#facc15]/20 text-[#facc15] px-1 rounded-sm font-mono font-bold">
+                      ANDA
+                    </span>
+                  )}
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-[9px] font-mono text-slate-400 truncate max-w-[80px]" title={status.ip}>
+                    {isCurrent ? "Perangkat Ini" : status.ip}
+                  </span>
+                  <span
+                    className={`text-[8px] font-mono font-bold uppercase tracking-wide ${
+                      isActive ? "text-emerald-400" : "text-slate-500"
+                    }`}
+                  >
+                    {isActive ? "Online" : "Standby"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
