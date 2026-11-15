@@ -715,7 +715,7 @@ export const StudentQrCardModal: React.FC<StudentQrCardModalProps> = ({
                   <div className="flex items-center gap-3.5">
                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/10 p-1.5 border border-yellow-400/80 flex items-center justify-center shadow-lg shadow-yellow-500/10 backdrop-blur-sm flex-shrink-0">
                       <img
-                        src="/logo_satriaapp.png"
+                        src="./logo_satriaapp.png"
                         alt="Logo Satria App"
                         className="w-full h-full object-contain filter drop-shadow"
                       />

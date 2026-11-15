@@ -734,7 +734,7 @@ export function JuryPanel({
         <div className="absolute inset-0 z-50 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 select-none pointer-events-auto animate-fade-in animate-duration-150">
           {/* LOGO PANEL JURI */}
           <img 
-            src="/juri.png"
+            src="./juri.png"
             alt="Logo Juri"
             className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 object-contain filter drop-shadow-[0_0_25px_rgba(255,255,255,0.45)] mb-3 sm:mb-4 select-none animate-pulse"
             onError={(e) => {
@@ -914,7 +914,7 @@ export function JuryPanel({
               id="btn-jury-blue-punch"
             >
               <img
-                src="/Punch.png"
+                src="./Punch.png"
                 alt="Punch"
                 className="max-h-[85%] max-w-[85%] object-contain brightness-0 invert pointer-events-none select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-105 group-active:scale-95"
               />
@@ -928,7 +928,7 @@ export function JuryPanel({
               id="btn-jury-blue-kick"
             >
               <img
-                src="/Kick.png"
+                src="./Kick.png"
                 alt="Kick"
                 className="max-h-[85%] max-w-[85%] object-contain brightness-0 invert pointer-events-none select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-105 group-active:scale-95"
               />
@@ -983,7 +983,7 @@ export function JuryPanel({
             title="Kembali ke Beranda JRZ SCORE"
           >
             <img 
-              src="/jrzscoreutama.png" 
+              src="./jrzscoreutama.png" 
               alt="JRZ SCORE" 
               className="max-h-full max-w-[90%] object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)] select-none transition-transform group-hover:scale-105 active:scale-95"
             />
@@ -1012,7 +1012,7 @@ export function JuryPanel({
               id="btn-jury-red-punch"
             >
               <img
-                src="/Punch.png"
+                src="./Punch.png"
                 alt="Punch"
                 className="max-h-[85%] max-w-[85%] object-contain brightness-0 invert pointer-events-none select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-105 group-active:scale-95"
               />
@@ -1026,7 +1026,7 @@ export function JuryPanel({
               id="btn-jury-red-kick"
             >
               <img
-                src="/Kick.png"
+                src="./Kick.png"
                 alt="Kick"
                 className="max-h-[85%] max-w-[85%] object-contain brightness-0 invert pointer-events-none select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-105 group-active:scale-95"
               />

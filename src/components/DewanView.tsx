@@ -174,7 +174,7 @@ export default function DewanView({ appState, onDispatchAction }: DewanViewProps
           </span>
           <h2 className="text-xl font-display font-bold text-white mt-2 flex items-center gap-2 flex-wrap">
             <span className="text-red-400">{activeMatch.sudutMerah.athlete?.nama || "TBD"}</span>
-            <img src="/vs.png" alt="VS" className="h-5 w-auto object-contain select-none" draggable={false} />
+            <img src="./vs.png" alt="VS" className="h-5 w-auto object-contain select-none" draggable={false} />
             <span className="text-blue-400">{activeMatch.sudutBiru.athlete?.nama || "TBD"}</span>
           </h2>
           <p className="text-xs text-gray-400 mt-1">

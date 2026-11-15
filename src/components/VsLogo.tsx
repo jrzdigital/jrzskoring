@@ -24,7 +24,7 @@ export const VsLogo: React.FC<VsLogoProps> = ({
 }) => {
   return (
     <img
-      src="/vs.png"
+      src="./vs.png"
       alt={alt}
       className={`${sizeClasses[size]} ${className}`}
       style={style}

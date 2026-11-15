@@ -167,7 +167,7 @@ export function NavbarTopRow({
         >
           {/* Logo JRZ SCORE (Menggantikan Logo IPSI, tanpa logo ganda) */}
           <img 
-            src="/jrzscoreutama.png" 
+            src="./jrzscoreutama.png" 
             alt="Logo JRZ SCORE" 
             className="h-7 sm:h-8 w-auto max-w-[36px] sm:max-w-[40px] object-contain shrink-0 filter drop-shadow-md group-hover:scale-105 transition-transform"
             referrerPolicy="no-referrer"

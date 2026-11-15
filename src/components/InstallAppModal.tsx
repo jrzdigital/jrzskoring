@@ -113,7 +113,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({ isOpen, onClos
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800/90 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950">
           <div className="flex items-center gap-3.5">
             <div className="w-11 h-11 rounded-xl bg-white/10 p-1 border border-red-500/50 flex items-center justify-center shadow-lg shadow-red-950/60 shrink-0 backdrop-blur-sm">
-              <img src="/logo_satriaapp.png" alt="Logo Satria App" className="w-full h-full object-contain filter drop-shadow" />
+              <img src="./logo_satriaapp.png" alt="Logo Satria App" className="w-full h-full object-contain filter drop-shadow" />
             </div>
             <div>
               <div className="flex items-center gap-2">

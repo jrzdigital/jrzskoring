@@ -311,7 +311,7 @@ function IconTeguran2({ className, active }: { className?: string; active?: bool
 function IconPeringatan1({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src="/peringatan1.png" 
+      src="./peringatan1.png" 
       alt="Peringatan 1" 
       className={`${className} object-contain ${active ? "brightness-125 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" : "opacity-80"}`} 
       referrerPolicy="no-referrer"
@@ -322,7 +322,7 @@ function IconPeringatan1({ className, active }: { className?: string; active?: b
 function IconPeringatan2({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src="/peringatan2.png" 
+      src="./peringatan2.png" 
       alt="Peringatan 2" 
       className={`${className} object-contain ${active ? "brightness-125 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" : "opacity-80"}`} 
       referrerPolicy="no-referrer"
@@ -9067,7 +9067,7 @@ export function SekretarisPanel({
                   </span>
                   <span className="text-[9px] font-sans font-bold text-white uppercase inline-flex items-center gap-1.5">
                     <span>{state?.fighterRedName || "PESILAT MERAH"}</span>
-                    <img src="/vs.png" alt="VS" className="h-2.5 w-auto object-contain select-none inline-block align-middle" draggable={false} />
+                    <img src="./vs.png" alt="VS" className="h-2.5 w-auto object-contain select-none inline-block align-middle" draggable={false} />
                     <span>{state?.fighterBlueName || "PESILAT BIRU"}</span>
                   </span>
                 </div>
@@ -10140,7 +10140,7 @@ export function SekretarisPanel({
                         <span className="text-red-500 font-black uppercase text-[12.5px]">
                           {getParticipantName(matchItem.fighterRedId) || "ATLIT MERAH"}
                         </span>
-                        <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain mx-2 drop-shadow-sm select-none" draggable={false} />
+                        <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain mx-2 drop-shadow-sm select-none" draggable={false} />
                         <span className="text-blue-500 font-black uppercase text-[12.5px]">
                           {getParticipantName(matchItem.fighterBlueId) || "ATLIT BIRU"}
                         </span>

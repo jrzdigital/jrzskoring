@@ -220,7 +220,7 @@ export const TgrsMonitorDisplay: React.FC<TgrsMonitorDisplayProps> = ({
           {/* Logo Kiri (IPSI) */}
           <div className="w-16 sm:w-20 md:w-28 h-10 sm:h-12 md:h-14 flex items-center justify-start shrink-0">
             <img 
-              src="/LogoIPSI.png" 
+              src="./LogoIPSI.png" 
               alt="Logo IPSI" 
               className="h-full w-auto object-contain filter drop-shadow-sm"
               onError={(e) => {
@@ -242,7 +242,7 @@ export const TgrsMonitorDisplay: React.FC<TgrsMonitorDisplayProps> = ({
           {/* Logo Kanan (Logo Kejuaraan / Sponsor) */}
           <div className="w-16 sm:w-20 md:w-28 h-10 sm:h-12 md:h-14 flex items-center justify-end shrink-0">
             <img 
-              src="/logomonitor2.png" 
+              src="./logomonitor2.png" 
               alt="Logo Event" 
               className="h-full w-auto object-contain filter drop-shadow-sm"
               onError={(e) => {

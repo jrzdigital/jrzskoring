@@ -448,7 +448,7 @@ export function JadwalView({
 
                   {/* Center VS Indicator */}
                   <div className="md:col-span-2 text-center flex flex-col items-center justify-center">
-                    <img src="/vs.png" alt="VS" className="h-4 w-auto object-contain my-0.5 drop-shadow-sm select-none" draggable={false} />
+                    <img src="./vs.png" alt="VS" className="h-4 w-auto object-contain my-0.5 drop-shadow-sm select-none" draggable={false} />
                     {isFinished && m.winner && (
                       <span className={`text-[10px] font-mono font-black mt-1 uppercase px-2 py-0.5 rounded ${
                         m.winner === "BIRU" ? "bg-cyan-950 text-cyan-300" : "bg-rose-950 text-rose-300"

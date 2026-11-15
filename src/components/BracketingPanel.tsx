@@ -316,7 +316,7 @@ export default function BracketingPanel({
 
                     {/* VS divider */}
                     <div className="flex items-center justify-center py-0.5">
-                      <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
+                      <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
                     </div>
 
                     {/* Sudut Biru */}

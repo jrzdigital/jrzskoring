@@ -90,7 +90,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/30 via-yellow-400/25 to-blue-600/30 rounded-full blur-xl opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none" />
               
               <img
-                src="/logo_satriaapp.png"
+                src="./logo_satriaapp.png"
                 alt="Logo Satria App"
                 loading="eager"
                 decoding="async"

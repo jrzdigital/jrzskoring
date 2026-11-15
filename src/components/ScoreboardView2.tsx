@@ -668,7 +668,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
         {/* Left Corner Logo: logomonitor1.png */}
         <div className="w-12 sm:w-16 md:w-20 lg:w-24 h-10 sm:h-12 md:h-14 lg:h-16 flex items-center justify-center shrink-0">
           <img 
-            src="/logomonitor1.png" 
+            src="./logomonitor1.png" 
             alt="Logo Kiri" 
             className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
             referrerPolicy="no-referrer"
@@ -693,7 +693,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
         {/* Right Corner Logo: logomonitor2.png */}
         <div className="w-12 sm:w-16 md:w-20 lg:w-24 h-10 sm:h-12 md:h-14 lg:h-16 flex items-center justify-center shrink-0">
           <img 
-            src="/logomonitor2.png" 
+            src="./logomonitor2.png" 
             alt="Logo Kanan" 
             className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
             referrerPolicy="no-referrer"
@@ -1284,7 +1284,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                 : "bg-[#0a1538] border border-cyan-500/30 text-cyan-200"
             }`}>
               <img 
-                src="/Punch.png" 
+                src="./Punch.png" 
                 alt="Punch" 
                 className={`h-5 sm:h-6 object-contain filter invert transition-all duration-150 ${isAnyPunchActive ? "brightness-200 scale-110 drop-shadow-[0_0_8px_rgba(245,158,11,1)]" : "brightness-150"}`} 
                 referrerPolicy="no-referrer" 
@@ -1297,7 +1297,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                 : "bg-[#0a1538] border border-cyan-500/30 text-cyan-200"
             }`}>
               <img 
-                src="/Kick.png" 
+                src="./Kick.png" 
                 alt="Kick" 
                 className={`h-5 sm:h-6 object-contain filter invert transition-all duration-150 ${isAnyKickActive ? "brightness-200 scale-110 drop-shadow-[0_0_8px_rgba(245,158,11,1)]" : "brightness-150"}`} 
                 referrerPolicy="no-referrer" 
@@ -1551,7 +1551,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
           <div className="w-full flex items-center justify-between gap-2 px-2 z-10 shrink-0">
             <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center shrink-0">
               <img 
-                src="/logomonitor1.png" 
+                src="./logomonitor1.png" 
                 alt="Logo" 
                 className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                 referrerPolicy="no-referrer"
@@ -1570,7 +1570,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
 
             <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center shrink-0">
               <img 
-                src="/logomonitor2.png" 
+                src="./logomonitor2.png" 
                 alt="Logo" 
                 className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                 referrerPolicy="no-referrer"
@@ -1648,7 +1648,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                     </div>
 
                     <div className="flex items-center justify-center my-0.5">
-                      <img src="/vs.png" alt="VS" className="h-4 w-auto object-contain drop-shadow select-none" draggable={false} />
+                      <img src="./vs.png" alt="VS" className="h-4 w-auto object-contain drop-shadow select-none" draggable={false} />
                     </div>
 
                     {/* Sudut Merah */}
@@ -1729,7 +1729,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
             <div className="w-full flex items-center justify-between gap-2 px-2 z-10 shrink-0">
               <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center shrink-0">
                 <img 
-                  src="/logomonitor1.png" 
+                  src="./logomonitor1.png" 
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
@@ -1748,7 +1748,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
 
               <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center shrink-0">
                 <img 
-                  src="/logomonitor2.png" 
+                  src="./logomonitor2.png" 
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
@@ -1905,7 +1905,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
             <div className="w-full flex items-center justify-between gap-2 px-2 z-10 shrink-0">
               <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center shrink-0">
                 <img 
-                  src="/logomonitor1.png" 
+                  src="./logomonitor1.png" 
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
@@ -1924,7 +1924,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
 
               <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center shrink-0">
                 <img 
-                  src="/logomonitor2.png" 
+                  src="./logomonitor2.png" 
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
@@ -1974,7 +1974,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                 {/* VS BADGE (Col 1) */}
                 <div className="md:col-span-1 flex flex-col items-center justify-center my-1 md:my-0">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 border-2 border-yellow-200 flex items-center justify-center p-2 shadow-[0_0_30px_rgba(250,204,21,0.9)] animate-pulse">
-                    <img src="/vs.png" alt="VS" className="w-full h-full object-contain filter drop-shadow select-none" draggable={false} />
+                    <img src="./vs.png" alt="VS" className="w-full h-full object-contain filter drop-shadow select-none" draggable={false} />
                   </div>
                   <span className="text-[9px] font-mono font-bold text-yellow-300 uppercase tracking-widest mt-1 hidden md:block">
                     TANDING

@@ -567,7 +567,7 @@ export function LoginModal({
             <div className="flex flex-col items-center mb-6 text-center">
               <div className="p-3 mb-4 rounded-full bg-purple-500/10 border border-purple-500/30 alert-glow flex items-center justify-center">
                 {isAdminLogin ? (
-                  <img src="/keygen.ico" className="w-10 h-10 object-contain" alt="Admin Icon" referrerPolicy="no-referrer" />
+                  <img src="./keygen.ico" className="w-10 h-10 object-contain" alt="Admin Icon" referrerPolicy="no-referrer" />
                 ) : (
                   <Lock className="w-8 h-8 text-purple-400" />
                 )}
@@ -679,7 +679,7 @@ export function LoginModal({
                   className="flex-1 py-2.5 text-xs font-extrabold tracking-wider rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-purple-500/20 text-white transition-all duration-200 cursor-pointer uppercase font-orbitron flex items-center justify-center gap-1.5"
                 >
                   {isAdminLogin ? (
-                    <img src="/keygen.ico" className="w-4 h-4 object-contain" alt="Admin Icon" referrerPolicy="no-referrer" />
+                    <img src="./keygen.ico" className="w-4 h-4 object-contain" alt="Admin Icon" referrerPolicy="no-referrer" />
                   ) : (
                     <Shield className="w-3.5 h-3.5" />
                   )}

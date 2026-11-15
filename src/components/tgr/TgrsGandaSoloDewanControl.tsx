@@ -463,7 +463,7 @@ export const TgrsGandaSoloDewanControl: React.FC<TgrsGandaSoloDewanControlProps>
               : "border-pink-500 shadow-[0_0_16px_rgba(236,72,153,0.8)] group-hover:border-cyan-300 group-hover:scale-110"
           }`}>
             <img 
-              src="/menubatas.png" 
+              src="./menubatas.png" 
               alt="Menu Batas Dewan" 
               className={`w-full h-full object-contain filter invert drop-shadow-[0_0_6px_rgba(244,63,94,0.8)] transition-all duration-300 ${
                 showHukumanModal 

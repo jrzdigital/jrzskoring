@@ -922,7 +922,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             onClick={() => handleSelectPresetAvatar('/logo_satriaapp.png')}
                             className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-purple-900/60 text-slate-200 hover:text-white border border-purple-800/60 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
                           >
-                            <img src="/logo_satriaapp.png" alt="Logo Satria" className="w-3.5 h-3.5 object-contain" />
+                            <img src="./logo_satriaapp.png" alt="Logo Satria" className="w-3.5 h-3.5 object-contain" />
                             <span>Gunakan Logo SatriaApp</span>
                           </button>
 

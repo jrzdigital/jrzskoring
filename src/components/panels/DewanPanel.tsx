@@ -2003,7 +2003,7 @@ export const DewanPanel: React.FC<DewanPanelProps> = ({ onBack }) => {
                   {/* Tengah: Badge VS & Selisih Nilai */}
                   <div className="md:col-span-2 text-center py-0.5">
                     <div className="flex items-center justify-center">
-                      <img src="/vs.png" alt="VS" className="h-5 w-auto object-contain select-none drop-shadow" draggable={false} />
+                      <img src="./vs.png" alt="VS" className="h-5 w-auto object-contain select-none drop-shadow" draggable={false} />
                     </div>
                     <div className="text-[9px] font-mono font-bold text-cyan-400 mt-0.5">
                       SELISIH: {Math.abs(scoreDifference).toFixed(3)}

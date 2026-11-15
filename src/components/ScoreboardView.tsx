@@ -637,7 +637,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
         {/* Left corner logo: logomonitor1.png */}
         <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center justify-center py-1 pl-0">
           <img 
-            src="/logomonitor1.png" 
+            src="./logomonitor1.png" 
             alt="Logo Kiri" 
             className="h-full w-auto object-contain drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]"
             referrerPolicy="no-referrer"
@@ -651,7 +651,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
         {/* Right corner logo: logomonitor2.png */}
         <div className="absolute right-0 top-0 bottom-0 z-20 flex items-center justify-center py-1 pr-0">
           <img 
-            src="/logomonitor2.png" 
+            src="./logomonitor2.png" 
             alt="Logo Kanan" 
             className="h-full w-auto object-contain drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]"
             referrerPolicy="no-referrer"
@@ -750,27 +750,27 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
             <div className="grid grid-cols-6 gap-1.5 w-full">
               {/* BINAAN 1 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.binaan1 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* BINAAN 2 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.binaan2 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 1 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.teguran1 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 2 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.teguran2 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 1 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.peringatan1 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 2 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.peringatan2 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
             </div>
           </div>
@@ -947,27 +947,27 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
             <div className="grid grid-cols-6 gap-1.5 w-full">
               {/* BINAAN 1 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.binaan1 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* BINAAN 2 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.binaan2 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 1 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.teguran1 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 2 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.teguran2 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 1 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.peringatan1 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 2 */}
               <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.peringatan2 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="/peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+                <img src="./peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
             </div>
           </div>
@@ -1045,7 +1045,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
               {/* Left corner logo: logomonitor1.png */}
               <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center justify-center py-1 pl-0">
                 <img 
-                  src="/logomonitor1.png" 
+                  src="./logomonitor1.png" 
                   alt="Logo Kiri" 
                   className="h-full w-auto object-contain drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]"
                   referrerPolicy="no-referrer"
@@ -1058,7 +1058,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
               {/* Right corner logo: logomonitor2.png */}
               <div className="absolute right-0 top-0 bottom-0 z-20 flex items-center justify-center py-1 pr-0">
                 <img 
-                  src="/logomonitor2.png" 
+                  src="./logomonitor2.png" 
                   alt="Logo Kanan" 
                   className="h-full w-auto object-contain drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]"
                   referrerPolicy="no-referrer"
@@ -1125,7 +1125,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
                   className="relative flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-b from-amber-400 to-yellow-600 border-2 border-yellow-300 shadow-[0_0_30px_rgba(245,158,11,0.4)]"
                 >
                   <img
-                    src="/vs.png"
+                    src="./vs.png"
                     alt="VS"
                     className="w-12 h-12 object-contain select-none drop-shadow filter brightness-105"
                     draggable={false}

@@ -1316,7 +1316,7 @@ export default function RegistrationOverlay({
                     <th className="p-4">KATEGORI / KELAS</th>
                     <th className="p-4 text-center">SUDUT BIRU (BLUE)</th>
                     <th className="p-4 text-center w-12 text-slate-500">
-                      <img src="/vs.png" alt="VS" className="h-4 w-auto inline-block object-contain opacity-70 select-none" draggable={false} />
+                      <img src="./vs.png" alt="VS" className="h-4 w-auto inline-block object-contain opacity-70 select-none" draggable={false} />
                     </th>
                     <th className="p-4 text-center">SUDUT MERAH (RED)</th>
                     <th className="p-4 text-center">TAHAPAN PERTANDINGAN</th>
@@ -1382,7 +1382,7 @@ export default function RegistrationOverlay({
 
                           <td className="p-4 text-center">
                             <div className="flex items-center justify-center">
-                              <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
+                              <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
                             </div>
                           </td>
 

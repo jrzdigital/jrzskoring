@@ -13,10 +13,9 @@ Aplikasi diinisialisasi sejak startup aplikasi (`src/main.tsx` -> `src/services/
 - **Realtime Database URL:** `https://jrz-score-default-rtdb.asia-southeast1.firebasedatabase.app`
 - **Storage Bucket:** `jrz-score.firebasestorage.app`
 
-### Proteksi Mode Online-Only
-- Seluruh panel (Dewan, Sekretaris, Juri 1–3, Timer, Scoreboard TV, Portal, dan Jurus TGRS) wajib terhubung ke internet dan **Firebase Realtime Database `.info/connected`**.
-- Jika koneksi internet atau koneksi ke Firebase RTDB terputus, layar pemblokiran online-only aktif secara otomatis untuk mencegah ketidaksinkronan skor antar perangkat.
-- Seluruh service worker offline (`sw.js`), BroadcastChannel lokal, serta skrip offline packaging telah dihapus.
+### Ketahanan Koneksi & Auto-Sync Real-Time
+- Seluruh panel (Dewan, Sekretaris, Juri 1–3, Timer, Scoreboard TV, Portal, dan Jurus TGRS) terhubung secara real-time ke **Firebase Realtime Database (`jrz-score`)**.
+- Apabila koneksi internet atau koneksi ke Firebase RTDB sempat terputus/terganggu, aplikasi tetap berjalan normal dengan penyimpanan penyangga lokal (*local snapshot & pending queue*) sehingga data yang ada tetap dapat digunakan dan skor baru otomatis tersinkron ke Firebase saat koneksi stabil kembali.
 
 ---
 
@@ -47,22 +46,15 @@ Pastikan di Firebase Console (**Realtime Database -> Rules**) Anda mengizinkan a
 
 ## Publikasi ke GitHub & GitHub Pages
 
-Repository ini sudah dikonfigurasi dengan `base: "./"` pada `vite.config.ts` serta workflow otomatis `.github/workflows/deploy.yml`.
+Repository ini sudah dikonfigurasi dengan `base: "./"` pada `vite.config.ts`, bundle statis siap pakai pada folder `docs/`, serta workflow otomatis `.github/workflows/deploy.yml`.
 
-### Langkah Publish:
-1. **Push kode ke GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Deploy JRZ Score Online Firebase"
-   git branch -M main
-   git remote add origin https://github.com/<username>/<nama-repo>.git
-   git push -u origin main
-   ```
-2. **Aktifkan GitHub Pages:**
-   - Buka repository Anda di GitHub -> **Settings** -> **Pages**.
-   - Pada bagian **Build and deployment -> Source**, pilih **GitHub Actions**.
-3. **Selesai!** Setiap push ke branch `main` atau `master` akan otomatis menjalankan `npm run build:gh` dan mempublikasikan situs ke `https://<username>.github.io/<nama-repo>/`.
+### Pilihan Pengaturan GitHub Pages:
+1. **Opsi A (Direkomendasikan): GitHub Actions**
+   - Buka repository di GitHub -> **Settings** -> **Pages** -> **Source**, pilih **GitHub Actions**.
+   - Setiap push ke branch `main`/`master` otomatis menjalankan `npm run build:gh` dan men-deploy folder `dist/`.
+2. **Opsi B: Deploy from a branch (`main / (root)` atau `main / docs`)**
+   - Folder `docs/` berisi build statis terkompilasi, dan `index.html` di root otomatis mengarahkan ke `./docs/` jika dibuka langsung sebagai file statis tanpa GitHub Actions sehingga halaman tidak pernah blank putih.
+   - Jika mengubah kode secara lokal sebelum push manual ke branch, jalankan `npm run build:docs` terlebih dahulu agar folder `docs/` ikut diperbarui.
 
 ---
 

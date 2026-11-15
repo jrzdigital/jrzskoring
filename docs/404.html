@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Remix JRZ Score full Firebase</title>
+    <meta name="description" content="Digital Scoring IPSI Untuk Penjurian Pertandingan Pencak Silat Kategori Tanding dan Jurus TGRS Online Realtime Database Firebase." />
+    <meta property="og:title" content="Remix JRZ Score full Firebase" />
+    <meta property="og:description" content="Digital Scoring IPSI Untuk Penjurian Pertandingan Pencak Silat Kategori Tanding dan Jurus TGRS Online Realtime Database Firebase." />
+    <link rel="icon" type="image/x-icon" href="./assets/jrzscoreutama-uuODnhLz.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <script type="module" crossorigin src="./assets/index-D824dk4j.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-gppAcg_9.css">
+  </head>
+  <body class="bg-[#070d1e] text-slate-100 min-h-screen" style="background-color:#070d1e;color:#f8fafc;margin:0;">
+    <div id="root"></div>
+    <script>
+      window.__JRZ_BOOTED__ = false;
+      window.__jrzRedirectToDocs = function () {
+        try {
+          if (window.__JRZ_BOOTED__) return;
+          var rawEntry = document.querySelector('script[src="/src/main.tsx"]');
+          if (!rawEntry) return;
+          var p = window.location.pathname || "/";
+          if (p.indexOf("/docs") !== -1) return;
+          var base = p.endsWith("/") ? p : p + "/";
+          window.location.replace(base + "docs/" + window.location.search + window.location.hash);
+        } catch (e) {}
+      };
+      if (typeof window !== "undefined" && /\.github\.io$/i.test(window.location.hostname || "")) {
+        setTimeout(function () {
+          if (!window.__JRZ_BOOTED__) {
+            window.__jrzRedirectToDocs();
+          }
+        }, 700);
+      }
+    </script>
+  </body>
+</html>

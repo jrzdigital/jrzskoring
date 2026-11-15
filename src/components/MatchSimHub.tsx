@@ -1652,6 +1652,10 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
   // Synchronize state from Express backend with Server-Sent Events (SSE) for sub-ms real-time latency
   useEffect(() => {
     if (!currentUser) return;
+    if (typeof window !== "undefined" && /\.github\.io$/i.test(window.location.hostname || "")) {
+      // Pada hosting statis GitHub Pages, sinkronisasi berjalan penuh via Firebase RTDB
+      return;
+    }
 
     let active = true;
     let eventSource: EventSource | null = null;
@@ -2612,7 +2616,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
             aria-hidden="true"
           >
             <img 
-              src="/IMG_4754.JPG.jpeg" 
+              src="./IMG_4754.JPG.jpeg" 
               alt="Watermark Latar Belakang" 
               loading="lazy"
               decoding="async"
@@ -2653,7 +2657,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
                 id="matchsim-logo-header"
               >
                 <img 
-                  src="/jrzscoreutama.png" 
+                  src="./jrzscoreutama.png" 
                   alt="JRZ Score Logo" 
                   loading="eager"
                   decoding="async"
@@ -2683,7 +2687,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
                 >
                   <div className="my-1 sm:my-2 flex items-center justify-center">
                     <img 
-                      src="/iconsekretaris.png" 
+                      src="./iconsekretaris.png" 
                       alt="Sekretaris" 
                       loading="lazy"
                       decoding="async"
@@ -2707,7 +2711,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
                 >
                   <div className="my-1 sm:my-2 flex items-center justify-center">
                     <img 
-                      src="/ketuadewan.png" 
+                      src="./ketuadewan.png" 
                       alt="Ketua Dewan" 
                       loading="lazy"
                       decoding="async"
@@ -2764,7 +2768,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
                 >
                   <div className="my-1 sm:my-2 flex items-center justify-center">
                     <img 
-                      src="/juri.png" 
+                      src="./juri.png" 
                       alt="Panel Juri" 
                       loading="lazy"
                       decoding="async"
@@ -2788,7 +2792,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
                 >
                   <div className="my-1 sm:my-2 flex items-center justify-center">
                     <img 
-                      src="/iconmonitor.png" 
+                      src="./iconmonitor.png" 
                       alt="Monitor Arena" 
                       loading="lazy"
                       decoding="async"

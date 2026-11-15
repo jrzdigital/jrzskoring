@@ -1060,7 +1060,7 @@ export const SekretarisView: React.FC = () => {
                       <div>
                         <span className="text-zinc-400 text-[9px] ml-1.5 inline-flex items-center gap-1">
                           <span>{hist.matchInfo.blueAthlete.name}</span>
-                          <img src="/vs.png" alt="VS" className="h-2.5 w-auto object-contain select-none inline-block align-middle" draggable={false} />
+                          <img src="./vs.png" alt="VS" className="h-2.5 w-auto object-contain select-none inline-block align-middle" draggable={false} />
                           <span>{hist.matchInfo.redAthlete.name}</span>
                         </span>
                       </div>
@@ -1184,7 +1184,7 @@ export const SekretarisView: React.FC = () => {
                     </div>
                     <div className="text-xs mt-1 flex items-center gap-1.5 flex-wrap">
                       <span className="text-blue-400 font-bold">{m.blueAthlete.name} ({m.blueAthlete.contingent})</span>
-                      <img src="/vs.png" alt="VS" className="h-3 w-auto object-contain select-none inline-block align-middle" draggable={false} />
+                      <img src="./vs.png" alt="VS" className="h-3 w-auto object-contain select-none inline-block align-middle" draggable={false} />
                       <span className="text-red-400 font-bold">{m.redAthlete.name} ({m.redAthlete.contingent})</span>
                     </div>
                   </div>

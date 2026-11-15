@@ -540,7 +540,7 @@ export const JuryPanel: React.FC<JuryPanelProps> = ({ onBack }) => {
               {/* JRZ SCORE Logo */}
               <div className="flex flex-col items-center justify-center">
                 <img
-                  src="/jrzscoreutama.png"
+                  src="./jrzscoreutama.png"
                   alt="JRZ SCORE"
                   className="h-8 sm:h-12 md:h-16 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,240,255,0.4)]"
                   onError={(e) => {

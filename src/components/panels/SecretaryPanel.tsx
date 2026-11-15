@@ -585,7 +585,7 @@ export const SecretaryPanel: React.FC<SecretaryPanelProps> = ({ onBack }) => {
                           {isTanding ? (
                             <span className="inline-flex items-center gap-1">
                               <span>{fm.tanding?.blueAthlete?.name} ({fm.tanding?.blueScores?.totalPoints})</span>
-                              <img src="/vs.png" alt="VS" className="h-3 w-auto object-contain select-none" draggable={false} />
+                              <img src="./vs.png" alt="VS" className="h-3 w-auto object-contain select-none" draggable={false} />
                               <span>{fm.tanding?.redAthlete?.name} ({fm.tanding?.redScores?.totalPoints})</span>
                             </span>
                           ) : (
@@ -830,7 +830,7 @@ export const SecretaryPanel: React.FC<SecretaryPanelProps> = ({ onBack }) => {
                         {isTanding ? (
                           <span className="inline-flex items-center gap-1">
                             <span className="text-blue-400">[B] {m.tanding?.blueAthlete?.name}</span>
-                            <img src="/vs.png" alt="VS" className="h-3 w-auto object-contain select-none" draggable={false} />
+                            <img src="./vs.png" alt="VS" className="h-3 w-auto object-contain select-none" draggable={false} />
                             <span className="text-red-400">[M] {m.tanding?.redAthlete?.name}</span>
                           </span>
                         ) : (

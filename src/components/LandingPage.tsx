@@ -160,7 +160,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSelectPanel }) => {
         <div className="relative group mb-3 sm:mb-5 md:mb-6 flex justify-center items-center shrink-0">
           <div className="absolute -inset-4 sm:-inset-6 bg-gradient-to-r from-purple-600/25 via-amber-500/15 to-indigo-600/25 rounded-full blur-xl sm:blur-2xl opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></div>
           <img
-            src="/jrzscoreutama.png"
+            src="./jrzscoreutama.png"
             alt="Logo JRZ Score Utama"
             className="relative w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 object-contain drop-shadow-[0_12px_40px_rgba(168,85,247,0.4)] transition-transform duration-300 hover:scale-105"
           />

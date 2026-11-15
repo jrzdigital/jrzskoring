@@ -1753,7 +1753,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
           {/* Main Logo from public folder */}
           <div className="w-48 h-28 flex items-center justify-center relative mb-2">
             <img 
-              src="/jrzscoreutama.png" 
+              src="./jrzscoreutama.png" 
               alt="JRZ Score Utama" 
               className="max-h-full object-contain drop-shadow-[0_0_25px_rgba(6,182,212,0.45)]"
               referrerPolicy="no-referrer"
@@ -1786,7 +1786,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
           >
             <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/[0.04] to-transparent pointer-events-none rounded-2xl" />
             <img 
-              src="/iconsekretaris.png" 
+              src="./iconsekretaris.png" 
               alt="SEKRETARIS" 
               className="w-44 h-44 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]"
               referrerPolicy="no-referrer"
@@ -1801,7 +1801,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
           >
             <div className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.04] to-transparent pointer-events-none rounded-2xl" />
             <img 
-              src="/ketuadewan.png" 
+              src="./ketuadewan.png" 
               alt="DEWAN" 
               className="w-44 h-44 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(234,179,8,0.3)]"
               referrerPolicy="no-referrer"
@@ -1816,7 +1816,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
           >
             <div className="absolute inset-0 bg-gradient-to-b from-blue-500/[0.04] to-transparent pointer-events-none rounded-2xl" />
             <img 
-              src="/juri.png" 
+              src="./juri.png" 
               alt="JURI" 
               className="w-44 h-44 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]"
               referrerPolicy="no-referrer"
@@ -1831,7 +1831,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
           >
             <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/[0.04] to-transparent pointer-events-none rounded-2xl" />
             <img 
-              src="/iconmonitor.png" 
+              src="./iconmonitor.png" 
               alt="MONITOR" 
               className="w-44 h-44 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]"
               referrerPolicy="no-referrer"
@@ -2940,7 +2940,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
                             {item.biruName} ({item.biruScore.toFixed(2)})
                           </span>
                         </div>
-                        <img src="/vs.png" alt="VS" className="h-3 w-auto object-contain mx-1 select-none inline-block align-middle" draggable={false} />
+                        <img src="./vs.png" alt="VS" className="h-3 w-auto object-contain mx-1 select-none inline-block align-middle" draggable={false} />
                         <div className="flex items-center gap-1">
                           <span className={`font-bold ${item.winner === item.merahName ? "text-white" : "text-zinc-400"}`}>
                             {item.merahName} ({item.merahScore.toFixed(2)})
@@ -4636,7 +4636,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
                               <th className="py-2 px-2.5 font-bold">KATEGORI / KELAS</th>
                               <th className="py-2 px-2.5 font-bold">SUDUT BIRU (BLUE)</th>
                               <th className="py-2 px-1.5 font-bold text-center">
-                                <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain inline-block opacity-80 select-none" draggable={false} />
+                                <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain inline-block opacity-80 select-none" draggable={false} />
                               </th>
                               <th className="py-2 px-2.5 font-bold">SUDUT MERAH (RED)</th>
                               <th className="py-2 px-2.5 font-bold text-center">TAHAPAN PERTANDINGAN</th>
@@ -4698,7 +4698,7 @@ export default function SeniScoringView({ onBack, isFullscreen }: { onBack?: () 
                                 {/* VS */}
                                 <td className="py-1.5 px-1.5 text-center">
                                   <div className="flex items-center justify-center">
-                                    <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
+                                    <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
                                   </div>
                                 </td>
 

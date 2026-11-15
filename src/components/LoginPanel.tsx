@@ -168,7 +168,7 @@ export const LoginPanel: React.FC<LoginPanelProps> = ({ onLoginSuccess }) => {
           {/* Logo SatriaApp */}
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-950/80 border border-emerald-500/40 shadow-2xl p-2 mb-3 relative group">
             <img 
-              src="/logo_satriaapp.png" 
+              src="./logo_satriaapp.png" 
               alt="Logo SatriaApp" 
               className="w-full h-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105"
               referrerPolicy="no-referrer"

@@ -265,7 +265,7 @@ export function BerandaPage({
           <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0 rounded-3xl">
             {/* Gambar Watermark Turnamen Silat (IMG_4754.JPG.jpeg) */}
             <img 
-              src="/IMG_4754.JPG.jpeg" 
+              src="./IMG_4754.JPG.jpeg" 
               alt="Watermark Turnamen Silat"
               className="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity scale-105 filter contrast-125 brightness-95 transition-all duration-700"
             />

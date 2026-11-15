@@ -324,7 +324,7 @@ export const RosterManager: React.FC = () => {
                   <th className="p-4">Kelas & Kategori</th>
                   <th className="p-4">Sudut Biru</th>
                   <th className="p-4 text-center">
-                    <img src="/vs.png" alt="VS" className="h-4 w-auto inline-block object-contain opacity-80" draggable={false} />
+                    <img src="./vs.png" alt="VS" className="h-4 w-auto inline-block object-contain opacity-80" draggable={false} />
                   </th>
                   <th className="p-4">Sudut Merah</th>
                   <th className="p-4">Status</th>
@@ -375,7 +375,7 @@ export const RosterManager: React.FC = () => {
                           <div className="text-[10px] text-zinc-400">{m.blueAthlete.contingent}</div>
                         </td>
                         <td className="p-4 text-center">
-                          <img src="/vs.png" alt="VS" className="h-4 w-auto inline-block object-contain opacity-75" draggable={false} />
+                          <img src="./vs.png" alt="VS" className="h-4 w-auto inline-block object-contain opacity-75" draggable={false} />
                         </td>
                         <td className="p-4">
                           <div className="font-extrabold text-red-400">{m.redAthlete.name}</div>

@@ -2503,7 +2503,7 @@ export function LotingPanel({
                               title="Tukar Posisi Sudut Biru & Sudut Merah"
                             >
                               <ArrowLeftRight className="w-3 h-3 text-amber-400" />
-                              <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain inline-block drop-shadow-sm select-none" draggable={false} />
+                              <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain inline-block drop-shadow-sm select-none" draggable={false} />
                               <span>· TUKAR SUDUT</span>
                             </button>
                             <div className="h-px bg-slate-800 flex-1"></div>

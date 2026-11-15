@@ -260,14 +260,14 @@ export const OfficialScoreSheetModal: React.FC<OfficialScoreSheetModalProps> = (
                 <>
                   KEUNGGULAN SKOR SEMENTARA:{' '}
                   <span className="text-red-600 font-bold inline-flex items-center gap-1">
-                    SUDUT MERAH ({redTotal} <img src="/vs.png" alt="VS" className="h-3 w-auto inline-block object-contain align-middle select-none" draggable={false} /> {blueTotal})
+                    SUDUT MERAH ({redTotal} <img src="./vs.png" alt="VS" className="h-3 w-auto inline-block object-contain align-middle select-none" draggable={false} /> {blueTotal})
                   </span>
                 </>
               ) : blueTotal > redTotal ? (
                 <>
                   KEUNGGULAN SKOR SEMENTARA:{' '}
                   <span className="text-blue-600 font-bold inline-flex items-center gap-1">
-                    SUDUT BIRU ({blueTotal} <img src="/vs.png" alt="VS" className="h-3 w-auto inline-block object-contain align-middle select-none" draggable={false} /> {redTotal})
+                    SUDUT BIRU ({blueTotal} <img src="./vs.png" alt="VS" className="h-3 w-auto inline-block object-contain align-middle select-none" draggable={false} /> {redTotal})
                   </span>
                 </>
               ) : (

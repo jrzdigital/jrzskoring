@@ -971,7 +971,7 @@ export function LaporanPanel({
   // ---------------------------------------------------------------------------
   const getIpsiLogoBase64 = async (): Promise<string | null> => {
     try {
-      const res = await fetch("/LogoIPSI.png");
+      const res = await fetch("./LogoIPSI.png");
       if (!res.ok) return null;
       const blob = await res.blob();
       return new Promise((resolve) => {
@@ -2685,7 +2685,7 @@ export function LaporanPanel({
                 <h3 className="font-black text-sm text-white uppercase tracking-wider flex items-center gap-1.5 flex-wrap">
                   <Activity className="w-4 h-4 text-amber-400 shrink-0" />
                   <span>LOG NILAI JURI PARTAI {selectedMatch.matchNumber} ({selectedMatch.fighterBlueName}</span>
-                  <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none inline-block align-middle" draggable={false} />
+                  <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none inline-block align-middle" draggable={false} />
                   <span>{selectedMatch.fighterRedName})</span>
                 </h3>
                 <span className="text-xs text-slate-400">

@@ -3135,7 +3135,7 @@ export default function SekretarisView({
                               <span className="text-zinc-500 font-mono shrink-0">•</span>
                               <span className="font-bold truncate text-zinc-200">
                                 <span className="text-blue-400 font-bold">{item.blueName}</span>
-                                <img src="/vs.png" alt="VS" className="h-3 w-auto inline-block mx-1.5 object-contain align-middle select-none" draggable={false} />
+                                <img src="./vs.png" alt="VS" className="h-3 w-auto inline-block mx-1.5 object-contain align-middle select-none" draggable={false} />
                                 <span className="text-red-400 font-bold">{item.redName}</span>
                               </span>
                             </div>
@@ -4618,7 +4618,7 @@ export default function SekretarisView({
 
                   <div className="flex items-center gap-2 text-[10px]">
                     <span className="text-blue-400 font-bold truncate max-w-[120px] uppercase">{nextMatchBlueName}</span>
-                    <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
+                    <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
                     <span className="text-red-400 font-bold truncate max-w-[120px] uppercase">{nextMatchRedName}</span>
                   </div>
                 </div>
@@ -4850,7 +4850,7 @@ export default function SekretarisView({
                                     {/* VS badge */}
                                     <div className="flex items-center justify-center my-1 gap-2">
                                       <div className="h-px bg-purple-900/30 flex-1" />
-                                      <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
+                                      <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain select-none" draggable={false} />
                                       <div className="h-px bg-purple-900/30 flex-1" />
                                     </div>
 

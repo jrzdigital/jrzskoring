@@ -464,7 +464,7 @@ export const MonitorPanel: React.FC<MonitorPanelProps> = ({ onBack }) => {
             </button>
 
             <img
-              src="/jrzscoreutama.png"
+              src="./jrzscoreutama.png"
               alt="Logo IPSI"
               className="w-9 h-9 sm:w-11 sm:h-11 object-contain rounded-full bg-slate-900 p-0.5 border border-amber-400/50 shadow-sm"
               onError={(e) => {

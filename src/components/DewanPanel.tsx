@@ -224,7 +224,7 @@ function DiscorsLogo() {
       title="Kembali ke Beranda JRZ SCORE"
     >
       <img
-        src="/jrzscoreutama.png"
+        src="./jrzscoreutama.png"
         alt="Logo JRZ Score Dewan"
         className="w-auto h-20 sm:h-24 md:h-28 max-h-28 max-w-[92%] object-contain filter drop-shadow-[0_0_22px_rgba(255,255,255,0.35)] transition-all duration-300 transform group-hover:scale-105 active:scale-95"
         referrerPolicy="no-referrer"
@@ -1312,7 +1312,7 @@ export function DewanPanel({
         <div className="absolute inset-0 z-50 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center p-4 select-none pointer-events-auto animate-fade-in animate-duration-150">
           {/* LOGO DEWAN PERTANDINGAN */}
           <img 
-            src="/ketuadewan.png"
+            src="./ketuadewan.png"
             alt="Logo Dewan"
             className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 object-contain filter drop-shadow-[0_0_25px_rgba(255,255,255,0.45)] mb-3 sm:mb-4 select-none animate-pulse"
             onError={(e) => {
@@ -1501,7 +1501,7 @@ export function DewanPanel({
                   className="bg-[#059669] hover:bg-[#047857] text-white font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow border border-emerald-400 transition-all"
                   title="Jatuhan Sah Sudut Biru (+3 Poin)"
                 >
-                  <img src="/Jatuhanbiru.png" className="w-6 h-6 md:w-7 md:h-7 object-contain rounded pointer-events-none" alt="Jatuhan +3" />
+                  <img src="./Jatuhanbiru.png" className="w-6 h-6 md:w-7 md:h-7 object-contain rounded pointer-events-none" alt="Jatuhan +3" />
                   <span className="text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none">JATUHAN +3</span>
                 </button>
 
@@ -1761,7 +1761,7 @@ export function DewanPanel({
             {/* Logo Dewan Pencak Silat di Tengah */}
             <div className="my-2 flex justify-center items-center">
               <img
-                src="/jrzscoredewan.png"
+                src="./jrzscoredewan.png"
                 alt="Logo JRZ Score Dewan"
                 className="w-14 h-14 md:w-16 md:h-16 object-contain pointer-events-none filter drop-shadow-[0_0_12px_rgba(250,204,21,0.35)]"
                 onError={(e) => {
@@ -1928,7 +1928,7 @@ export function DewanPanel({
                   className="bg-[#059669] hover:bg-[#047857] text-white font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow border border-emerald-400 transition-all"
                   title="Jatuhan Sah Sudut Merah (+3 Poin)"
                 >
-                  <img src="/jatuhanmerah.png" className="w-6 h-6 md:w-7 md:h-7 object-contain rounded pointer-events-none" alt="Jatuhan +3" />
+                  <img src="./jatuhanmerah.png" className="w-6 h-6 md:w-7 md:h-7 object-contain rounded pointer-events-none" alt="Jatuhan +3" />
                   <span className="text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none">JATUHAN +3</span>
                 </button>
 

@@ -200,7 +200,7 @@ export default function SpectatorMonitorView(props: SpectatorMonitorProps) {
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0 select-none">
         <img 
           id="monitor-watermark-bg"
-          src="/jrzscoreutama.png" 
+          src="./jrzscoreutama.png" 
           alt="Watermark Logo JRZ Score" 
           className="w-[85vw] max-w-[1100px] max-h-[85vh] h-auto object-contain opacity-[0.09] pointer-events-none select-none drop-shadow-[0_0_80px_rgba(0,180,255,0.2)] transition-all duration-700"
           referrerPolicy="no-referrer"

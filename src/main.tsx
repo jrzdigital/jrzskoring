@@ -6,6 +6,7 @@ import { app as firebaseApp, firebaseConfig } from "./services/firebase";
 
 // Pastikan Firebase terinisialisasi pada entry index aplikasi
 if (typeof window !== "undefined") {
+  (window as any).__JRZ_BOOTED__ = true;
   (window as any).__JRZ_FIREBASE_APP__ = firebaseApp;
   (window as any).__JRZ_FIREBASE_CONFIG__ = firebaseConfig;
 

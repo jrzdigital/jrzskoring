@@ -80,7 +80,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       {/* BACKGROUND WATERMARK WITH VIGNETTE */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
         <img
-          src="/IMG_4754.JPG.jpeg"
+          src="./IMG_4754.JPG.jpeg"
           alt="Watermark Latar Belakang"
           loading="eager"
           className={`w-full h-full object-cover object-center transition-opacity duration-500 ${
@@ -104,7 +104,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             <div className="absolute inset-0 rounded-full bg-yellow-400/25 blur-3xl transform scale-90 sm:scale-105 group-hover:scale-115 transition-transform duration-700 pointer-events-none" />
             
             <img
-              src="/jrzscoreutama.png"
+              src="./jrzscoreutama.png"
               alt="JRZ SCORE Logo"
               loading="eager"
               decoding="async"
@@ -135,7 +135,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             {/* Gambar Tanda Panah di Kanan Mengarah ke Kanan (Tanpa Kotak Hitam / 100% Transparan) */}
             <div className="relative flex items-center justify-center">
               <img
-                src="/assets/aistudio/arrow_right_transparent.png"
+                src="./assets/aistudio/arrow_right_transparent.png"
                 alt="Tanda Panah Kanan"
                 className="h-7 sm:h-9 md:h-11 w-auto object-contain transition-all duration-300 group-hover:translate-x-2 drop-shadow-[0_0_15px_rgba(250,204,21,0.7)] group-hover:drop-shadow-[0_0_35px_rgba(250,204,21,1)]"
               />

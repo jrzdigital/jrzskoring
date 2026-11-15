@@ -188,7 +188,7 @@ export const TimerPanel: React.FC<TimerPanelProps> = ({ onBack }) => {
                 <span className="inline-flex items-center gap-1.5 flex-wrap">
                   <span>TANDING:</span>
                   <span className="text-cyan-400">{activeMatch.tanding?.blueAthlete?.name || 'Sudut Biru'}</span>
-                  <img src="/vs.png" alt="VS" className="h-3.5 w-auto object-contain inline-block select-none" draggable={false} />
+                  <img src="./vs.png" alt="VS" className="h-3.5 w-auto object-contain inline-block select-none" draggable={false} />
                   <span className="text-rose-400">{activeMatch.tanding?.redAthlete?.name || 'Sudut Merah'}</span>
                 </span>
               ) : (
