@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MatchState, Athlete } from "../types";
 import VisualSummaryModal from "./VisualSummaryModal";
-const logoDisco = "/jrzscoredewan.png";
+const logoDisco = "./jrzscoredewan.png";
 import { 
   Play, Pause, RotateCcw, Plus, Minus, Settings, 
   Trash2, Trophy, HelpCircle, CornerDownLeft, AlertCircle,

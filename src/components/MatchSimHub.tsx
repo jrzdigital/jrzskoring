@@ -7,6 +7,7 @@ import React, { useEffect, useState, useRef, useMemo, useCallback, useReducer } 
 import { MatchState, FighterColor, ActionType, MatchStatus, AuthSession, UserAccount } from "../types";
 import { sound } from "../utils/sound";
 import { matchEngine } from "../utils/matchEngine";
+import { isStaticHosting } from "../utils/networkHost";
 import { createDefaultMatchState, normalizeMatchState, getSyncedNow, computeLiveTimeLeft } from "../utils/defaultMatchState";
 import { authService } from "../services/authService";
 
@@ -1747,6 +1748,10 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
     };
 
     const fetchState = async () => {
+      if (isStaticHosting()) {
+        if (active) setIsSseActive(false);
+        return;
+      }
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 800);
@@ -2666,7 +2671,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
                   onError={(e) => {
                     const target = e.currentTarget;
                     if (!target.src.endsWith("/logo_panel_dewan.svg")) {
-                      target.src = "/logo_panel_dewan.svg";
+                      target.src = "./logo_panel_dewan.svg";
                     }
                   }}
                 />

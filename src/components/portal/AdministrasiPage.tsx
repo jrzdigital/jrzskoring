@@ -1336,8 +1336,8 @@ export function AdministrasiPage({
     const waktuPelaksanaan = localStorage.getItem("sekretaris_waktuPelaksanaan") || localStorage.getItem("sekretaris_tanggalCetakDokumen") || "07 S.D 12 JULI 2026";
     const namaDaerahCetak = localStorage.getItem("sekretaris_namaDaerahCetak") || "IDI RAYEUK";
     const tanggalCetakDokumen = localStorage.getItem("sekretaris_tanggalCetakDokumen") || "01 JULI 2026";
-    const logoLeftLocal = localStorage.getItem("sekretaris_logoLeftLocal") || "/logo_panel_dewan.svg";
-    const logoRightLocal = localStorage.getItem("sekretaris_logoRightLocal") || "/logo_panel_dewan.svg";
+    const logoLeftLocal = localStorage.getItem("sekretaris_logoLeftLocal") || "./logo_panel_dewan.svg";
+    const logoRightLocal = localStorage.getItem("sekretaris_logoRightLocal") || "./logo_panel_dewan.svg";
 
     // Exactly 14 matches fits perfectly per page on standard A4 portrait layout
     const MATCHES_PER_PAGE = 14;

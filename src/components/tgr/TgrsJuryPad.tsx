@@ -759,7 +759,7 @@ export const TgrsJuryPad: React.FC<TgrsJuryPadProps> = ({
               alt="Logo Timer"
               className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 object-contain filter drop-shadow-[0_0_25px_rgba(255,255,255,0.45)] mb-3 sm:mb-4 select-none animate-pulse"
               onError={(e) => {
-                e.currentTarget.src = "/icon timer.png";
+                e.currentTarget.src = "./icon timer.png";
               }}
             />
 

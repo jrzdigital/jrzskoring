@@ -267,7 +267,7 @@ function BreakCountdownTimer() {
 function IconBinaan1({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/binaan1_orange.png" : "/binaan1.png"} 
+      src={active ? "./binaan1_orange.png" : "./binaan1.png"} 
       alt="Binaan 1" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -278,7 +278,7 @@ function IconBinaan1({ className, active }: { className?: string; active?: boole
 function IconBinaan2({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/binaan2_orange.png" : "/binaan2.png"} 
+      src={active ? "./binaan2_orange.png" : "./binaan2.png"} 
       alt="Binaan 2" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -289,7 +289,7 @@ function IconBinaan2({ className, active }: { className?: string; active?: boole
 function IconTeguran1({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/teguran1_yellow.png" : "/teguran1.png"} 
+      src={active ? "./teguran1_yellow.png" : "./teguran1.png"} 
       alt="Teguran 1" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -300,7 +300,7 @@ function IconTeguran1({ className, active }: { className?: string; active?: bool
 function IconTeguran2({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/teguran2_yellow.png" : "/teguran2.png"} 
+      src={active ? "./teguran2_yellow.png" : "./teguran2.png"} 
       alt="Teguran 2" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -1918,8 +1918,8 @@ export function SekretarisPanel({
   const generateMatchPdfPage = (doc: jsPDF, mItem?: any) => {
     // Margins: top 1.8cm, left 3cm, right 3cm. (X range: 30 to 180, total printable width = 150mm)
     // Draw Left and Right logos
-    drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 30, 18, 14);
-    drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 166, 18, 14);
+    drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 30, 18, 14);
+    drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 166, 18, 14);
 
     // Title & Event Header
     doc.setFont("Helvetica", "bold");
@@ -4364,8 +4364,8 @@ export function SekretarisPanel({
 
       // Draw custom margins: top=10, left=20, right=20, bottom=10
       // Draw left (the logo loaded in Left monitor parameter) and right (from event input logoRightLocal) logos
-      drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 20, 10, 15);
-      drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 175, 10, 15);
+      drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 20, 10, 15);
+      drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 175, 10, 15);
 
       // Center title text and determine textCursorY dynamically to prevent overlap
       let textCursorY = 13;
@@ -4587,8 +4587,8 @@ export function SekretarisPanel({
         
         if (lastRowY + 45 > 285) {
           doc.addPage();
-          drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 20, 10, 15);
-          drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 175, 10, 15);
+          drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 20, 10, 15);
+          drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 175, 10, 15);
           
           let sigHeaderY = 15;
           doc.setFont("Helvetica", "bold");
@@ -6297,8 +6297,8 @@ export function SekretarisPanel({
     });
 
     // Draw logos left and right
-    drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 15, 10, 15);
-    drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 267, 10, 15);
+    drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 15, 10, 15);
+    drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 267, 10, 15);
 
     // Header titles
     doc.setFont("Helvetica", "bold");
@@ -6797,8 +6797,8 @@ export function SekretarisPanel({
       }
 
       // Draw custom margins and official logo Kop
-      drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 15, 10, 15);
-      drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 180, 10, 15);
+      drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 15, 10, 15);
+      drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 180, 10, 15);
 
       // Center title text
       let textCursorY = 13;
@@ -6900,8 +6900,8 @@ export function SekretarisPanel({
         const sigY = lastRowY + 15;
         if (sigY + 35 > 285) {
           doc.addPage();
-          drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 15, 10, 15);
-          drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 180, 10, 15);
+          drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 15, 10, 15);
+          drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 180, 10, 15);
           
           let sigHeaderY = 15;
           doc.setFont("Helvetica", "bold");
@@ -7412,8 +7412,8 @@ export function SekretarisPanel({
         pageCount++;
 
         // Draw logos left and right
-        drawLogoPdf(doc, logoLeftLocal || "/logo_panel_dewan.svg", 15, 10, 15);
-        drawLogoPdf(doc, logoRightLocal || "/logo_panel_dewan.svg", 267, 10, 15);
+        drawLogoPdf(doc, logoLeftLocal || "./logo_panel_dewan.svg", 15, 10, 15);
+        drawLogoPdf(doc, logoRightLocal || "./logo_panel_dewan.svg", 267, 10, 15);
 
         // Header titles
         doc.setFont("Helvetica", "bold");
@@ -7879,7 +7879,7 @@ export function SekretarisPanel({
       {/* Subtle Background Watermark */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-[0.03] select-none bg-center bg-no-repeat bg-contain z-0" 
-        style={{ backgroundImage: "url('/jrzscoreutama.png')", backgroundSize: "min(50vw, 50vh)" }}
+        style={{ backgroundImage: "url('./jrzscoreutama.png')", backgroundSize: "min(50vw, 50vh)" }}
       />
 
       {/* FLOATING TOAST NOTIFICATION OVERLAY */}

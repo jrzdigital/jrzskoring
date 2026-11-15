@@ -32,8 +32,14 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#070d1e] text-slate-100 flex items-center justify-center p-6">
-          <div className="bg-slate-900 border border-red-500/30 rounded-2xl p-8 max-w-lg w-full text-center shadow-2xl">
+        <div
+          className="min-h-screen bg-[#070d1e] text-slate-100 flex items-center justify-center p-6"
+          style={{ minHeight: "100vh", backgroundColor: "#070d1e", color: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}
+        >
+          <div
+            className="bg-slate-900 border border-red-500/30 rounded-2xl p-8 max-w-lg w-full text-center shadow-2xl"
+            style={{ backgroundColor: "#0f172a", borderRadius: "16px", padding: "32px", maxWidth: "512px", width: "100%", textAlign: "center" }}
+          >
             <div className="w-16 h-16 bg-red-500/10 text-red-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500/20">
               <AlertTriangle className="w-8 h-8" />
             </div>

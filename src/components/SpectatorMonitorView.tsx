@@ -144,8 +144,8 @@ export default function SpectatorMonitorView(props: SpectatorMonitorProps) {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  const displayLogoKiri = syncedLogoKiri || "/LogoIPSI.png";
-  const displayLogoKanan = syncedLogoKanan || "/LogoIPSI.png";
+  const displayLogoKiri = syncedLogoKiri || "./LogoIPSI.png";
+  const displayLogoKanan = syncedLogoKanan || "./LogoIPSI.png";
 
   // Category Title Display
   const categoryDisplay = 
@@ -244,7 +244,7 @@ export default function SpectatorMonitorView(props: SpectatorMonitorProps) {
               className="h-12 w-12 object-contain drop-shadow-[0_0_12px_rgba(250,204,21,0.4)] border border-amber-400/40 rounded-full p-0.5 bg-[#070e1c]" 
               referrerPolicy="no-referrer"
               onError={(e) => {
-                e.currentTarget.src = "/LogoIPSI.png";
+                e.currentTarget.src = "./LogoIPSI.png";
               }}
             />
             <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3">
@@ -303,7 +303,7 @@ export default function SpectatorMonitorView(props: SpectatorMonitorProps) {
             className="h-12 w-12 object-contain border border-amber-400/40 rounded-full p-0.5 bg-[#070e1c] drop-shadow-[0_0_12px_rgba(250,204,21,0.3)] shrink-0"
             referrerPolicy="no-referrer"
             onError={(e) => {
-              e.currentTarget.src = "/LogoIPSI.png";
+              e.currentTarget.src = "./LogoIPSI.png";
             }}
           />
         </div>

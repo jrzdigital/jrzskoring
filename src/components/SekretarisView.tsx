@@ -1234,7 +1234,7 @@ export default function SekretarisView({
     let ipsiLogoBase64 = "";
     let rightLogoBase64 = "";
     try {
-      ipsiLogoBase64 = await getBase64Image("/LogoIPSI.png");
+      ipsiLogoBase64 = await getBase64Image("./LogoIPSI.png");
     } catch (e) {
       console.warn("Could not load IPSI logo:", e);
     }

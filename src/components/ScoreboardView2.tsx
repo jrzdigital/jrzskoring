@@ -673,7 +673,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
             className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
             referrerPolicy="no-referrer"
             onError={(e) => {
-              e.currentTarget.src = "/jrzscoreutama.png";
+              e.currentTarget.src = "./jrzscoreutama.png";
             }}
           />
         </div>
@@ -698,7 +698,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
             className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
             referrerPolicy="no-referrer"
             onError={(e) => {
-              e.currentTarget.src = "/jrzscoreutama.png";
+              e.currentTarget.src = "./jrzscoreutama.png";
             }}
           />
         </div>
@@ -808,17 +808,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 1, Col 1: BINAAN 1 (ORANGE) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.bluePenalties.binaan1
+                  state.bluePenalties?.binaan1
                     ? "border-orange-500/80 bg-orange-950/50 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                     : "border-blue-900/60 bg-[#061028]"
                 }`}
                 title="Binaan 1"
               >
                 <img 
-                  src={state.bluePenalties.binaan1 ? "/binaan1_orange.png" : "/binaan1.png"} 
+                  src={state.bluePenalties?.binaan1 ? "./binaan1_orange.png" : "./binaan1.png"} 
                   alt="B1" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.bluePenalties.binaan1 
+                    state.bluePenalties?.binaan1 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(249,115,22,1)] scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -829,17 +829,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 1, Col 2: BINAAN 2 (ORANGE) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.bluePenalties.binaan2
+                  state.bluePenalties?.binaan2
                     ? "border-orange-500/80 bg-orange-950/50 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                     : "border-blue-900/60 bg-[#061028]"
                 }`}
                 title="Binaan 2"
               >
                 <img 
-                  src={state.bluePenalties.binaan2 ? "/binaan2_orange.png" : "/binaan2.png"} 
+                  src={state.bluePenalties?.binaan2 ? "./binaan2_orange.png" : "./binaan2.png"} 
                   alt="B2" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.bluePenalties.binaan2 
+                    state.bluePenalties?.binaan2 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(249,115,22,1)] scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -850,17 +850,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 2, Col 1: TEGURAN 1 (KUNING) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.bluePenalties.teguran1
+                  state.bluePenalties?.teguran1
                     ? "border-yellow-400/80 bg-yellow-950/50 shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                     : "border-blue-900/60 bg-[#061028]"
                 }`}
                 title="Teguran 1 (-1 Poin)"
               >
                 <img 
-                  src={state.bluePenalties.teguran1 ? "/teguran1_yellow.png" : "/teguran1.png"} 
+                  src={state.bluePenalties?.teguran1 ? "./teguran1_yellow.png" : "./teguran1.png"} 
                   alt="T1" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.bluePenalties.teguran1 
+                    state.bluePenalties?.teguran1 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(250,204,21,1)] scale-110 brightness-115" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -871,17 +871,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 2, Col 2: TEGURAN 2 (KUNING) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.bluePenalties.teguran2
+                  state.bluePenalties?.teguran2
                     ? "border-yellow-400/80 bg-yellow-950/50 shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                     : "border-blue-900/60 bg-[#061028]"
                 }`}
                 title="Teguran 2 (-2 Poin)"
               >
                 <img 
-                  src={state.bluePenalties.teguran2 ? "/teguran2_yellow.png" : "/teguran2.png"} 
+                  src={state.bluePenalties?.teguran2 ? "./teguran2_yellow.png" : "./teguran2.png"} 
                   alt="T2" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.bluePenalties.teguran2 
+                    state.bluePenalties?.teguran2 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(250,204,21,1)] scale-110 brightness-115" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -892,17 +892,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 3, Col 1: PERINGATAN 1 (MERAH BERKEDIP) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.bluePenalties.peringatan1
+                  state.bluePenalties?.peringatan1
                     ? "border-red-500/80 bg-red-950/60 shadow-[0_0_20px_rgba(239,68,68,0.6)]"
                     : "border-blue-900/60 bg-[#061028]"
                 }`}
                 title="Peringatan 1 (-5 Poin)"
               >
                 <img 
-                  src={state.bluePenalties.peringatan1 ? "/peringatan1_red.png" : "/peringatan1.png"} 
+                  src={state.bluePenalties?.peringatan1 ? "./peringatan1_red.png" : "./peringatan1.png"} 
                   alt="P1" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.bluePenalties.peringatan1 
+                    state.bluePenalties?.peringatan1 
                       ? "opacity-100 filter drop-shadow-[0_0_20px_rgba(239,68,68,1)] animate-pulse scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -913,17 +913,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 3, Col 2: PERINGATAN 2 (MERAH BERKEDIP) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.bluePenalties.peringatan2
+                  state.bluePenalties?.peringatan2
                     ? "border-red-500/80 bg-red-950/60 shadow-[0_0_20px_rgba(239,68,68,0.6)]"
                     : "border-blue-900/60 bg-[#061028]"
                 }`}
                 title="Peringatan 2 (-10 Poin)"
               >
                 <img 
-                  src={state.bluePenalties.peringatan2 ? "/peringatan2_red.png" : "/peringatan2.png"} 
+                  src={state.bluePenalties?.peringatan2 ? "./peringatan2_red.png" : "./peringatan2.png"} 
                   alt="P2" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.bluePenalties.peringatan2 
+                    state.bluePenalties?.peringatan2 
                       ? "opacity-100 filter drop-shadow-[0_0_20px_rgba(239,68,68,1)] animate-pulse scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -980,12 +980,12 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
           {/* Top Logo (Logo IPSI / Logo Kiri) */}
           <div className="w-full flex-1 flex items-center justify-center py-0.5 px-1 min-h-0">
             <img 
-              src={state.logoLeft || "/logomonitor1.png"} 
+              src={state.logoLeft || "./logomonitor1.png"} 
               alt="Logo IPSI" 
               className="max-h-full w-auto max-w-full object-contain filter drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] brightness-110" 
               referrerPolicy="no-referrer"
               onError={(e) => {
-                e.currentTarget.src = "/jrzscoreutama.png";
+                e.currentTarget.src = "./jrzscoreutama.png";
               }}
             />
           </div>
@@ -1019,12 +1019,12 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
           {/* Bottom Logo (Logo Event / Logo Kanan) */}
           <div className="w-full flex-1 flex items-center justify-center py-0.5 px-1 min-h-0">
             <img 
-              src={state.logoRight || "/logomonitor2.png"} 
+              src={state.logoRight || "./logomonitor2.png"} 
               alt="Logo Event" 
               className="max-h-full w-auto max-w-full object-contain filter drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] brightness-110" 
               referrerPolicy="no-referrer"
               onError={(e) => {
-                e.currentTarget.src = "/jrzscoreutama.png";
+                e.currentTarget.src = "./jrzscoreutama.png";
               }}
             />
           </div>
@@ -1102,17 +1102,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 1, Col 1: BINAAN 1 (ORANGE) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.redPenalties.binaan1
+                  state.redPenalties?.binaan1
                     ? "border-orange-500/80 bg-orange-950/50 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                     : "border-red-900/60 bg-[#1c060c]"
                 }`}
                 title="Binaan 1"
               >
                 <img 
-                  src={state.redPenalties.binaan1 ? "/binaan1_orange.png" : "/binaan1.png"} 
+                  src={state.redPenalties?.binaan1 ? "./binaan1_orange.png" : "./binaan1.png"} 
                   alt="B1" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.redPenalties.binaan1 
+                    state.redPenalties?.binaan1 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(249,115,22,1)] scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -1123,17 +1123,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 1, Col 2: BINAAN 2 (ORANGE) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.redPenalties.binaan2
+                  state.redPenalties?.binaan2
                     ? "border-orange-500/80 bg-orange-950/50 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                     : "border-red-900/60 bg-[#1c060c]"
                 }`}
                 title="Binaan 2"
               >
                 <img 
-                  src={state.redPenalties.binaan2 ? "/binaan2_orange.png" : "/binaan2.png"} 
+                  src={state.redPenalties?.binaan2 ? "./binaan2_orange.png" : "./binaan2.png"} 
                   alt="B2" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.redPenalties.binaan2 
+                    state.redPenalties?.binaan2 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(249,115,22,1)] scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -1144,17 +1144,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 2, Col 1: TEGURAN 1 (KUNING) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.redPenalties.teguran1
+                  state.redPenalties?.teguran1
                     ? "border-yellow-400/80 bg-yellow-950/50 shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                     : "border-red-900/60 bg-[#1c060c]"
                 }`}
                 title="Teguran 1 (-1 Poin)"
               >
                 <img 
-                  src={state.redPenalties.teguran1 ? "/teguran1_yellow.png" : "/teguran1.png"} 
+                  src={state.redPenalties?.teguran1 ? "./teguran1_yellow.png" : "./teguran1.png"} 
                   alt="T1" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.redPenalties.teguran1 
+                    state.redPenalties?.teguran1 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(250,204,21,1)] scale-110 brightness-115" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -1165,17 +1165,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 2, Col 2: TEGURAN 2 (KUNING) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.redPenalties.teguran2
+                  state.redPenalties?.teguran2
                     ? "border-yellow-400/80 bg-yellow-950/50 shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                     : "border-red-900/60 bg-[#1c060c]"
                 }`}
                 title="Teguran 2 (-2 Poin)"
               >
                 <img 
-                  src={state.redPenalties.teguran2 ? "/teguran2_yellow.png" : "/teguran2.png"} 
+                  src={state.redPenalties?.teguran2 ? "./teguran2_yellow.png" : "./teguran2.png"} 
                   alt="T2" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.redPenalties.teguran2 
+                    state.redPenalties?.teguran2 
                       ? "opacity-100 filter drop-shadow-[0_0_16px_rgba(250,204,21,1)] scale-110 brightness-115" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -1186,17 +1186,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 3, Col 1: PERINGATAN 1 (MERAH BERKEDIP) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.redPenalties.peringatan1
+                  state.redPenalties?.peringatan1
                     ? "border-red-500/80 bg-red-950/60 shadow-[0_0_20px_rgba(239,68,68,0.6)]"
                     : "border-red-900/60 bg-[#1c060c]"
                 }`}
                 title="Peringatan 1 (-5 Poin)"
               >
                 <img 
-                  src={state.redPenalties.peringatan1 ? "/peringatan1_red.png" : "/peringatan1.png"} 
+                  src={state.redPenalties?.peringatan1 ? "./peringatan1_red.png" : "./peringatan1.png"} 
                   alt="P1" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.redPenalties.peringatan1 
+                    state.redPenalties?.peringatan1 
                       ? "opacity-100 filter drop-shadow-[0_0_20px_rgba(239,68,68,1)] animate-pulse scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -1207,17 +1207,17 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
               {/* Row 3, Col 2: PERINGATAN 2 (MERAH BERKEDIP) */}
               <div 
                 className={`rounded-xl border flex items-center justify-center p-0.5 sm:p-1 transition-all overflow-hidden ${
-                  state.redPenalties.peringatan2
+                  state.redPenalties?.peringatan2
                     ? "border-red-500/80 bg-red-950/60 shadow-[0_0_20px_rgba(239,68,68,0.6)]"
                     : "border-red-900/60 bg-[#1c060c]"
                 }`}
                 title="Peringatan 2 (-10 Poin)"
               >
                 <img 
-                  src={state.redPenalties.peringatan2 ? "/peringatan2_red.png" : "/peringatan2.png"} 
+                  src={state.redPenalties?.peringatan2 ? "./peringatan2_red.png" : "./peringatan2.png"} 
                   alt="P2" 
                   className={`max-h-full max-w-full object-contain transition-all duration-200 ${
-                    state.redPenalties.peringatan2 
+                    state.redPenalties?.peringatan2 
                       ? "opacity-100 filter drop-shadow-[0_0_20px_rgba(239,68,68,1)] animate-pulse scale-110 brightness-110" 
                       : "opacity-20 grayscale brightness-50 contrast-50"
                   }`} 
@@ -1555,7 +1555,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                 alt="Logo" 
                 className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                 referrerPolicy="no-referrer"
-                onError={(e) => { e.currentTarget.src = "/jrzscoreutama.png"; }}
+                onError={(e) => { e.currentTarget.src = "./jrzscoreutama.png"; }}
               />
             </div>
 
@@ -1574,7 +1574,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                 alt="Logo" 
                 className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                 referrerPolicy="no-referrer"
-                onError={(e) => { e.currentTarget.src = "/jrzscoreutama.png"; }}
+                onError={(e) => { e.currentTarget.src = "./jrzscoreutama.png"; }}
               />
             </div>
           </div>
@@ -1733,7 +1733,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
-                  onError={(e) => { e.currentTarget.src = "/jrzscoreutama.png"; }}
+                  onError={(e) => { e.currentTarget.src = "./jrzscoreutama.png"; }}
                 />
               </div>
 
@@ -1752,7 +1752,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
-                  onError={(e) => { e.currentTarget.src = "/jrzscoreutama.png"; }}
+                  onError={(e) => { e.currentTarget.src = "./jrzscoreutama.png"; }}
                 />
               </div>
             </div>
@@ -1909,7 +1909,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
-                  onError={(e) => { e.currentTarget.src = "/jrzscoreutama.png"; }}
+                  onError={(e) => { e.currentTarget.src = "./jrzscoreutama.png"; }}
                 />
               </div>
 
@@ -1928,7 +1928,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
                   alt="Logo" 
                   className="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
                   referrerPolicy="no-referrer"
-                  onError={(e) => { e.currentTarget.src = "/jrzscoreutama.png"; }}
+                  onError={(e) => { e.currentTarget.src = "./jrzscoreutama.png"; }}
                 />
               </div>
             </div>

@@ -7,7 +7,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { MatchState, MatchStatus, MatchLog } from "../types";
 import { DigitalTimer } from "./DigitalTimer";
 import { rtdbScoringEngine } from "../services/rtdbScoringEngine";
-const defaultLogo = "/jrzscoreutama.png";
+const defaultLogo = "./jrzscoreutama.png";
 import { 
   Play, 
   Pause, 
@@ -149,7 +149,7 @@ function playClickSound(freq = 880, duration = 0.06) {
 function IconBinaan1({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/binaan1_orange.png" : "/binaan1.png"} 
+      src={active ? "./binaan1_orange.png" : "./binaan1.png"} 
       alt="Binaan 1" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -160,7 +160,7 @@ function IconBinaan1({ className, active }: { className?: string; active?: boole
 function IconBinaan2({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/binaan2_orange.png" : "/binaan2.png"} 
+      src={active ? "./binaan2_orange.png" : "./binaan2.png"} 
       alt="Binaan 2" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -171,7 +171,7 @@ function IconBinaan2({ className, active }: { className?: string; active?: boole
 function IconTeguran1({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/teguran1_yellow.png" : "/teguran1.png"} 
+      src={active ? "./teguran1_yellow.png" : "./teguran1.png"} 
       alt="Teguran 1" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -182,7 +182,7 @@ function IconTeguran1({ className, active }: { className?: string; active?: bool
 function IconTeguran2({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/teguran2_yellow.png" : "/teguran2.png"} 
+      src={active ? "./teguran2_yellow.png" : "./teguran2.png"} 
       alt="Teguran 2" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -193,7 +193,7 @@ function IconTeguran2({ className, active }: { className?: string; active?: bool
 function IconPeringatan1({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/peringatan1_red.png" : "/peringatan1.png"} 
+      src={active ? "./peringatan1_red.png" : "./peringatan1.png"} 
       alt="Peringatan 1" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -204,7 +204,7 @@ function IconPeringatan1({ className, active }: { className?: string; active?: b
 function IconPeringatan2({ className, active }: { className?: string; active?: boolean }) {
   return (
     <img 
-      src={active ? "/peringatan2_red.png" : "/peringatan2.png"} 
+      src={active ? "./peringatan2_red.png" : "./peringatan2.png"} 
       alt="Peringatan 2" 
       className={`${className} object-contain`} 
       referrerPolicy="no-referrer"
@@ -637,7 +637,7 @@ export function DewanPanel({
       });
     }
 
-    const eventLogoLeft = state.logoLeft || "/logo_panel_dewan.svg"; // Custom Silat Logo default fallback
+    const eventLogoLeft = state.logoLeft || "./logo_panel_dewan.svg"; // Custom Silat Logo default fallback
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -1153,7 +1153,7 @@ export function DewanPanel({
       {/* Subtle Background Watermark */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-[0.04] select-none bg-center bg-no-repeat bg-contain z-0" 
-        style={{ backgroundImage: "url('/jrzscoreutama.png')", backgroundSize: "min(40vw, 40vh)" }}
+        style={{ backgroundImage: "url('./jrzscoreutama.png')", backgroundSize: "min(40vw, 40vh)" }}
       />
 
       {/* BANNER POP UP BABAK TERAKHIR SELESAI (BABAK 3 DARI 3 ATAU BABAK 2 DARI 2) */}
@@ -1316,7 +1316,7 @@ export function DewanPanel({
             alt="Logo Dewan"
             className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 object-contain filter drop-shadow-[0_0_25px_rgba(255,255,255,0.45)] mb-3 sm:mb-4 select-none animate-pulse"
             onError={(e) => {
-              e.currentTarget.src = "/jrzscoredewan.png";
+              e.currentTarget.src = "./jrzscoredewan.png";
             }}
           />
 
@@ -1459,40 +1459,40 @@ export function DewanPanel({
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "BLUE", penaltyType: "BINAAN_1" }), 600)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.binaan1
+                    state.bluePenalties?.binaan1
                       ? "bg-[#f97316] hover:bg-[#ea580c] text-white ring-2 ring-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Binaan 1 Sudut Biru"
                 >
                   <IconBinaan1 
-                    active={state.bluePenalties.binaan1} 
+                    active={state.bluePenalties?.binaan1} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.bluePenalties.binaan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
+                      state.bluePenalties?.binaan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.binaan1 ? "text-white" : "text-slate-300"
+                    state.bluePenalties?.binaan1 ? "text-white" : "text-slate-300"
                   }`}>BINAAN 1</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "BLUE", penaltyType: "BINAAN_2" }), 610)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.binaan2
+                    state.bluePenalties?.binaan2
                       ? "bg-[#f97316] hover:bg-[#ea580c] text-white ring-2 ring-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Binaan 2 Sudut Biru"
                 >
                   <IconBinaan2 
-                    active={state.bluePenalties.binaan2} 
+                    active={state.bluePenalties?.binaan2} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.bluePenalties.binaan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
+                      state.bluePenalties?.binaan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.binaan2 ? "text-white" : "text-slate-300"
+                    state.bluePenalties?.binaan2 ? "text-white" : "text-slate-300"
                   }`}>BINAAN 2</span>
                 </button>
 
@@ -1509,40 +1509,40 @@ export function DewanPanel({
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "BLUE", penaltyType: "TEGURAN_1" }), 500)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.teguran1
+                    state.bluePenalties?.teguran1
                       ? "bg-[#facc15] hover:bg-[#eab308] text-slate-950 ring-2 ring-yellow-200 shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Teguran 1 Sudut Biru (-1 Poin)"
                 >
                   <IconTeguran1 
-                    active={state.bluePenalties.teguran1} 
+                    active={state.bluePenalties?.teguran1} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.bluePenalties.teguran1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
+                      state.bluePenalties?.teguran1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.teguran1 ? "text-slate-950" : "text-slate-300"
+                    state.bluePenalties?.teguran1 ? "text-slate-950" : "text-slate-300"
                   }`}>TEGURAN 1</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "BLUE", penaltyType: "TEGURAN_2" }), 480)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.teguran2
+                    state.bluePenalties?.teguran2
                       ? "bg-[#facc15] hover:bg-[#eab308] text-slate-950 ring-2 ring-yellow-200 shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Teguran 2 Sudut Biru (-2 Poin)"
                 >
                   <IconTeguran2 
-                    active={state.bluePenalties.teguran2} 
+                    active={state.bluePenalties?.teguran2} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.bluePenalties.teguran2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
+                      state.bluePenalties?.teguran2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.teguran2 ? "text-slate-950" : "text-slate-300"
+                    state.bluePenalties?.teguran2 ? "text-slate-950" : "text-slate-300"
                   }`}>TEGURAN 2</span>
                 </button>
 
@@ -1562,57 +1562,57 @@ export function DewanPanel({
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "BLUE", penaltyType: "PERINGATAN_1" }), 400)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.peringatan1
+                    state.bluePenalties?.peringatan1
                       ? "bg-[#ef4444] hover:bg-[#dc2626] text-white ring-2 ring-red-200 shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Peringatan 1 Sudut Biru (-5 Poin)"
                 >
                   <IconPeringatan1 
-                    active={state.bluePenalties.peringatan1} 
+                    active={state.bluePenalties?.peringatan1} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.bluePenalties.peringatan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
+                      state.bluePenalties?.peringatan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.peringatan1 ? "text-white" : "text-slate-300"
+                    state.bluePenalties?.peringatan1 ? "text-white" : "text-slate-300"
                   }`}>PERINGATAN 1</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "BLUE", penaltyType: "PERINGATAN_2" }), 380)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.peringatan2
+                    state.bluePenalties?.peringatan2
                       ? "bg-[#ef4444] hover:bg-[#dc2626] text-white ring-2 ring-red-200 shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Peringatan 2 Sudut Biru (-10 Poin)"
                 >
                   <IconPeringatan2 
-                    active={state.bluePenalties.peringatan2} 
+                    active={state.bluePenalties?.peringatan2} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.bluePenalties.peringatan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
+                      state.bluePenalties?.peringatan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.peringatan2 ? "text-white" : "text-slate-300"
+                    state.bluePenalties?.peringatan2 ? "text-white" : "text-slate-300"
                   }`}>PERINGATAN 2</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => setPendingDisqualify("BLUE"), 200)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.bluePenalties.disqualified
+                    state.bluePenalties?.disqualified
                       ? "bg-[#831843] hover:bg-[#9d174d] text-white border border-pink-500 ring-2 ring-pink-300 shadow-[0_0_15px_rgba(236,72,153,0.6)] animate-bounce"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Diskualifikasi Sudut Biru"
                 >
                   <Ban className={`w-5 h-5 md:w-6 md:h-6 pointer-events-none transition-all ${
-                    state.bluePenalties.disqualified ? "text-white" : "text-slate-400"
+                    state.bluePenalties?.disqualified ? "text-white" : "text-slate-400"
                   }`} />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.bluePenalties.disqualified ? "text-white" : "text-slate-300"
+                    state.bluePenalties?.disqualified ? "text-white" : "text-slate-300"
                   }`}>DISKUALIFIKASI</span>
                 </button>
               </div>
@@ -1765,7 +1765,7 @@ export function DewanPanel({
                 alt="Logo JRZ Score Dewan"
                 className="w-14 h-14 md:w-16 md:h-16 object-contain pointer-events-none filter drop-shadow-[0_0_12px_rgba(250,204,21,0.35)]"
                 onError={(e) => {
-                  e.currentTarget.src = "/jrzscoreutama.png";
+                  e.currentTarget.src = "./jrzscoreutama.png";
                 }}
               />
             </div>
@@ -1886,40 +1886,40 @@ export function DewanPanel({
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "RED", penaltyType: "BINAAN_1" }), 600)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.binaan1
+                    state.redPenalties?.binaan1
                       ? "bg-[#f97316] hover:bg-[#ea580c] text-white ring-2 ring-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Binaan 1 Sudut Merah"
                 >
                   <IconBinaan1 
-                    active={state.redPenalties.binaan1} 
+                    active={state.redPenalties?.binaan1} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.redPenalties.binaan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
+                      state.redPenalties?.binaan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.binaan1 ? "text-white" : "text-slate-300"
+                    state.redPenalties?.binaan1 ? "text-white" : "text-slate-300"
                   }`}>BINAAN 1</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "RED", penaltyType: "BINAAN_2" }), 610)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.binaan2
+                    state.redPenalties?.binaan2
                       ? "bg-[#f97316] hover:bg-[#ea580c] text-white ring-2 ring-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Binaan 2 Sudut Merah"
                 >
                   <IconBinaan2 
-                    active={state.redPenalties.binaan2} 
+                    active={state.redPenalties?.binaan2} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.redPenalties.binaan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
+                      state.redPenalties?.binaan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.binaan2 ? "text-white" : "text-slate-300"
+                    state.redPenalties?.binaan2 ? "text-white" : "text-slate-300"
                   }`}>BINAAN 2</span>
                 </button>
 
@@ -1936,40 +1936,40 @@ export function DewanPanel({
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "RED", penaltyType: "TEGURAN_1" }), 500)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.teguran1
+                    state.redPenalties?.teguran1
                       ? "bg-[#facc15] hover:bg-[#eab308] text-slate-950 ring-2 ring-yellow-200 shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Teguran 1 Sudut Merah (-1 Poin)"
                 >
                   <IconTeguran1 
-                    active={state.redPenalties.teguran1} 
+                    active={state.redPenalties?.teguran1} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.redPenalties.teguran1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
+                      state.redPenalties?.teguran1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.teguran1 ? "text-slate-950" : "text-slate-300"
+                    state.redPenalties?.teguran1 ? "text-slate-950" : "text-slate-300"
                   }`}>TEGURAN 1</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "RED", penaltyType: "TEGURAN_2" }), 480)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.teguran2
+                    state.redPenalties?.teguran2
                       ? "bg-[#facc15] hover:bg-[#eab308] text-slate-950 ring-2 ring-yellow-200 shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Teguran 2 Sudut Merah (-2 Poin)"
                 >
                   <IconTeguran2 
-                    active={state.redPenalties.teguran2} 
+                    active={state.redPenalties?.teguran2} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.redPenalties.teguran2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
+                      state.redPenalties?.teguran2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(250,204,21,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.teguran2 ? "text-slate-950" : "text-slate-300"
+                    state.redPenalties?.teguran2 ? "text-slate-950" : "text-slate-300"
                   }`}>TEGURAN 2</span>
                 </button>
 
@@ -1989,57 +1989,57 @@ export function DewanPanel({
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "RED", penaltyType: "PERINGATAN_1" }), 400)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.peringatan1
+                    state.redPenalties?.peringatan1
                       ? "bg-[#ef4444] hover:bg-[#dc2626] text-white ring-2 ring-red-200 shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Peringatan 1 Sudut Merah (-5 Poin)"
                 >
                   <IconPeringatan1 
-                    active={state.redPenalties.peringatan1} 
+                    active={state.redPenalties?.peringatan1} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.redPenalties.peringatan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
+                      state.redPenalties?.peringatan1 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.peringatan1 ? "text-white" : "text-slate-300"
+                    state.redPenalties?.peringatan1 ? "text-white" : "text-slate-300"
                   }`}>PERINGATAN 1</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => onDewanAction({ command: "PENALTY", fighter: "RED", penaltyType: "PERINGATAN_2" }), 380)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.peringatan2
+                    state.redPenalties?.peringatan2
                       ? "bg-[#ef4444] hover:bg-[#dc2626] text-white ring-2 ring-red-200 shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Peringatan 2 Sudut Merah (-10 Poin)"
                 >
                   <IconPeringatan2 
-                    active={state.redPenalties.peringatan2} 
+                    active={state.redPenalties?.peringatan2} 
                     className={`w-5 h-5 md:w-6 md:h-6 object-contain pointer-events-none transition-all ${
-                      state.redPenalties.peringatan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
+                      state.redPenalties?.peringatan2 ? "opacity-100 filter drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]" : "opacity-40 grayscale"
                     }`} 
                   />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.peringatan2 ? "text-white" : "text-slate-300"
+                    state.redPenalties?.peringatan2 ? "text-white" : "text-slate-300"
                   }`}>PERINGATAN 2</span>
                 </button>
 
                 <button
                   onClick={() => executeAction(() => setPendingDisqualify("RED"), 200)}
                   className={`font-black rounded-xl p-2 md:p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95 shadow transition-all ${
-                    state.redPenalties.disqualified
+                    state.redPenalties?.disqualified
                       ? "bg-[#831843] hover:bg-[#9d174d] text-white border border-pink-500 ring-2 ring-pink-300 shadow-[0_0_15px_rgba(236,72,153,0.6)] animate-bounce"
                       : "bg-slate-700/80 hover:bg-slate-600/90 text-slate-300 border border-slate-600/60"
                   }`}
                   title="Diskualifikasi Sudut Merah"
                 >
                   <Ban className={`w-5 h-5 md:w-6 md:h-6 pointer-events-none transition-all ${
-                    state.redPenalties.disqualified ? "text-white" : "text-slate-400"
+                    state.redPenalties?.disqualified ? "text-white" : "text-slate-400"
                   }`} />
                   <span className={`text-[9.5px] md:text-[11px] font-black uppercase text-center leading-none ${
-                    state.redPenalties.disqualified ? "text-white" : "text-slate-300"
+                    state.redPenalties?.disqualified ? "text-white" : "text-slate-300"
                   }`}>DISKUALIFIKASI</span>
                 </button>
               </div>
@@ -2161,7 +2161,7 @@ export function DewanPanel({
       )}
 
       {/* DISKUALIFIKASI POPUP NOTIFICATIONS */}
-      {state.redPenalties.disqualified && (
+      {state.redPenalties?.disqualified && (
         <div className="absolute inset-0 bg-slate-950/98 backdrop-blur-md flex flex-col justify-center items-center p-6 z-50 border-4 border-red-500 text-center animate-fade-in font-sans">
           <div className="w-20 h-20 bg-red-600/10 border-2 border-red-500 text-red-500 flex items-center justify-center rounded-full mb-4 animate-bounce shadow-[0_0_15px_rgba(239,68,68,0.5)]">
             <Ban className="w-12 h-12 text-red-500" />
@@ -2208,7 +2208,7 @@ export function DewanPanel({
         </div>
       )}
 
-      {state.bluePenalties.disqualified && (
+      {state.bluePenalties?.disqualified && (
         <div className="absolute inset-0 bg-slate-950/98 backdrop-blur-md flex flex-col justify-center items-center p-6 z-50 border-4 border-blue-500 text-center animate-fade-in font-sans">
           <div className="w-20 h-20 bg-red-600/10 border-2 border-red-500 text-red-500 flex items-center justify-center rounded-full mb-4 animate-bounce shadow-[0_0_15px_rgba(239,68,68,0.5)]">
             <Ban className="w-12 h-12 text-red-500" />

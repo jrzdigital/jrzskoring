@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { isStaticHosting } from "../utils/networkHost";
 import QRCode from "qrcode";
 import { 
   X, 
@@ -75,7 +76,7 @@ export const JuryConnectModal: React.FC<JuryConnectModalProps> = ({
 
   // Fetch local server network IPs & interface classification
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || isStaticHosting()) return;
     fetch("/api/server-info")
       .then((res) => res.json())
       .then((data) => {

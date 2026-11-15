@@ -224,7 +224,7 @@ export const TgrsMonitorDisplay: React.FC<TgrsMonitorDisplayProps> = ({
               alt="Logo IPSI" 
               className="h-full w-auto object-contain filter drop-shadow-sm"
               onError={(e) => {
-                e.currentTarget.src = "/logomonitor1.png";
+                e.currentTarget.src = "./logomonitor1.png";
               }}
             />
           </div>
@@ -246,7 +246,7 @@ export const TgrsMonitorDisplay: React.FC<TgrsMonitorDisplayProps> = ({
               alt="Logo Event" 
               className="h-full w-auto object-contain filter drop-shadow-sm"
               onError={(e) => {
-                e.currentTarget.src = "/jrzscoreutama.png";
+                e.currentTarget.src = "./jrzscoreutama.png";
               }}
             />
           </div>

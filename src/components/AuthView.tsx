@@ -404,7 +404,7 @@ export function AuthView({ onLoginSuccess }: AuthViewProps) {
       {/* Background Glow Watermark */}
       <div 
         className="fixed inset-0 opacity-[0.035] pointer-events-none bg-center bg-no-repeat bg-contain z-0"
-        style={{ backgroundImage: "url('/jrzscoreutama.png')", backgroundSize: "min(60vw, 60vh)" }}
+        style={{ backgroundImage: "url('./jrzscoreutama.png')", backgroundSize: "min(60vw, 60vh)" }}
       />
 
       {/* Subtle Top Ambient Lighting */}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" style="background-color:#070d1e;color:#f8fafc;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
@@ -12,13 +12,93 @@
     <meta property="og:description" content="Digital Scoring IPSI Untuk Penjurian Pertandingan Pencak Silat Kategori Tanding dan Jurus TGRS Online Realtime Database Firebase." />
     <link rel="icon" type="image/x-icon" href="./assets/jrzscoreutama-uuODnhLz.ico" />
     <link rel="manifest" href="./manifest.json" />
-    <script type="module" crossorigin src="./assets/index-D824dk4j.js"></script>
+    <script>
+      (function () {
+        window.__JRZ_BOOTED__ = false;
+        window.__jrzShowBootError = function (reason) {
+          try {
+            if (window.__JRZ_BOOTED__) return;
+            var root = document.getElementById("root");
+            if (!root) return;
+            var msg = reason ? String(reason) : "Gagal memuat skrip aplikasi.";
+            root.innerHTML =
+              '<div style="min-height:100vh;background:#070d1e;color:#f8fafc;display:flex;align-items:center;justify-content:center;padding:24px;font-family:system-ui,-apple-system,sans-serif;">' +
+              '<div style="max-width:460px;width:100%;background:#0f172a;border:1px solid rgba(245,158,11,0.4);border-radius:16px;padding:24px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.6);">' +
+              '<div style="font-size:18px;font-weight:800;color:#fbbf24;margin-bottom:8px;">JRZ SCORE — Pemulihan Halaman</div>' +
+              '<div style="font-size:13px;color:#cbd5e1;margin-bottom:16px;line-height:1.5;">Terjadi kendala saat memuat aset aplikasi terbaru. Tekan tombol di bawah untuk membersihkan cache dan memuat ulang.</div>' +
+              '<div style="font-size:11px;font-family:monospace;color:#fda4af;background:#020617;padding:10px;border-radius:8px;margin-bottom:16px;word-break:break-word;text-align:left;">' +
+              msg.replace(/</g, "&lt;") +
+              '</div>' +
+              '<button onclick="window.__jrzHardReload()" style="background:#f59e0b;color:#020617;border:none;border-radius:10px;padding:10px 18px;font-weight:800;font-size:13px;cursor:pointer;">Muat Ulang &amp; Bersihkan Cache</button>' +
+              '</div></div>';
+          } catch (e) {}
+        };
+        window.__jrzHardReload = function () {
+          try {
+            Promise.all([
+              "serviceWorker" in navigator
+                ? navigator.serviceWorker.getRegistrations().then(function (regs) {
+                    return Promise.all(regs.map(function (r) { return r.unregister(); }));
+                  })
+                : Promise.resolve(),
+              "caches" in window
+                ? caches.keys().then(function (keys) {
+                    return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                  })
+                : Promise.resolve()
+            ]).finally(function () {
+              var u = new URL(window.location.href);
+              u.searchParams.set("_v", String(Date.now()));
+              window.location.replace(u.toString());
+            });
+          } catch (e) {
+            window.location.reload();
+          }
+        };
+        window.addEventListener("error", function (ev) {
+          if (!window.__JRZ_BOOTED__ && ev && (ev.message || (ev.target && ev.target.src))) {
+            window.__jrzShowBootError(ev.message || ("Gagal memuat: " + ev.target.src));
+          }
+        }, true);
+        window.addEventListener("unhandledrejection", function (ev) {
+          if (!window.__JRZ_BOOTED__ && ev && ev.reason) {
+            window.__jrzShowBootError(ev.reason.message || ev.reason);
+          }
+        });
+        // Purge any legacy Service Worker & Workbox cache immediately on boot
+        try {
+          if ("caches" in window) {
+            caches.keys().then(function (keys) {
+              keys.forEach(function (k) { caches.delete(k).catch(function () {}); });
+            }).catch(function () {});
+          }
+          if ("serviceWorker" in navigator) {
+            var hadController = !!navigator.serviceWorker.controller;
+            navigator.serviceWorker.getRegistrations().then(function (regs) {
+              if (!regs || regs.length === 0) return;
+              Promise.all(regs.map(function (r) { return r.unregister(); })).then(function () {
+                if (hadController && !sessionStorage.getItem("jrz_sw_purged")) {
+                  sessionStorage.setItem("jrz_sw_purged", "1");
+                  window.location.reload();
+                }
+              });
+            }).catch(function () {});
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CwQMeAMD.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-gppAcg_9.css">
   </head>
-  <body class="bg-[#070d1e] text-slate-100 min-h-screen" style="background-color:#070d1e;color:#f8fafc;margin:0;">
-    <div id="root"></div>
+  <body class="bg-[#070d1e] text-slate-100 min-h-screen" style="background-color:#070d1e;color:#f8fafc;margin:0;min-height:100vh;">
+    <div id="root">
+      <div style="min-height:100vh;background-color:#070d1e;color:#f8fafc;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif;gap:12px;">
+        <div style="width:40px;height:40px;border:3px solid rgba(250,204,21,0.25);border-top-color:#facc15;border-radius:9999px;"></div>
+        <div style="font-size:14px;font-weight:700;letter-spacing:0.15em;color:#facc15;">JRZ SCORE</div>
+        <div style="font-size:12px;color:#94a3b8;">Memuat Sistem Digital Scoring...</div>
+      </div>
+    </div>
     <script>
-      window.__JRZ_BOOTED__ = false;
       window.__jrzRedirectToDocs = function () {
         try {
           if (window.__JRZ_BOOTED__) return;
@@ -30,13 +110,16 @@
           window.location.replace(base + "docs/" + window.location.search + window.location.hash);
         } catch (e) {}
       };
-      if (typeof window !== "undefined" && /\.github\.io$/i.test(window.location.hostname || "")) {
-        setTimeout(function () {
-          if (!window.__JRZ_BOOTED__) {
+      setTimeout(function () {
+        if (!window.__JRZ_BOOTED__) {
+          var rawEntry = document.querySelector('script[src="/src/main.tsx"]');
+          if (rawEntry && /\.github\.io$/i.test(window.location.hostname || "")) {
             window.__jrzRedirectToDocs();
+          } else {
+            window.__jrzShowBootError && window.__jrzShowBootError("Waktu muat aplikasi habis. Periksa koneksi internet atau tekan Muat Ulang.");
           }
-        }, 700);
-      }
+        }
+      }, 12000);
     </script>
   </body>
 </html>

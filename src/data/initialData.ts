@@ -18,7 +18,7 @@ export const initialTournamentConfig: TournamentConfig = {
   cityCreated: 'Jakarta',
   dateCreated: '12 Oktober 2026',
   eventTime: '08:00 - 18:00 WIB',
-  leftLogoUrl: '/jrzscoreutama.png',
+  leftLogoUrl: './jrzscoreutama.png',
   rightLogoUrl: '',
   leadRefereeSignature: 'Drs. H. Suwandi, M.Pd',
   secretarySignature: 'Ahmad Fauzan, S.Or',

@@ -12,7 +12,7 @@ import { matchEngine } from "../utils/matchEngine";
 import { rtdbScoringEngine } from "../services/rtdbScoringEngine";
 import { getDynamicFontSizeClass, getDynamicTextStyle } from "../utils/textScalingHelper";
 
-const defaultLogo = "/jrzscoreutama.png";
+const defaultLogo = "./jrzscoreutama.png";
 
 // Memoized SparklingStar Sub-component to prevent Math.random evaluations on every timer or score change
 const SparklingStar = React.memo(({ sIdx }: { sIdx: number }) => {
@@ -518,10 +518,10 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
     const redClub = rawRedClub || "KONTINGEN MERAH";
     const blueClub = rawBlueClub || "KONTINGEN BIRU";
 
-    if (state.redPenalties.disqualified) {
+    if (state.redPenalties?.disqualified) {
       return { color: "BLUE", name: blueName, club: blueClub, score: state.scoreBlue, opponentScore: state.scoreRed, method: "DISKUALIFIKASI LAWAN" };
     }
-    if (state.bluePenalties.disqualified) {
+    if (state.bluePenalties?.disqualified) {
       return { color: "RED", name: redName, club: redClub, score: state.scoreRed, opponentScore: state.scoreBlue, method: "DISKUALIFIKASI LAWAN" };
     }
 
@@ -718,7 +718,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
             <span className="text-[#2D7DFF] font-sans italic font-black text-2xl sm:text-3xl tracking-wider select-none uppercase drop-shadow-[0_0_12px_rgba(45,125,255,0.4)]">
               BIRU
             </span>
-            {state.bluePenalties.disqualified && (
+            {state.bluePenalties?.disqualified && (
               <span className="px-2 py-0.5 rounded bg-red-600 text-white font-sans font-black text-xs uppercase animate-pulse">
                 DISQ
               </span>
@@ -749,28 +749,28 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
           <div className="w-full bg-[#0c051f]/50 border border-indigo-950/40 rounded-xl p-1.5 sm:p-2 mt-1.5 sm:mt-2 shrink-0 z-10">
             <div className="grid grid-cols-6 gap-1.5 w-full">
               {/* BINAAN 1 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.binaan1 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties?.binaan1 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties?.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* BINAAN 2 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.binaan2 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties?.binaan2 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties?.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 1 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.teguran1 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties?.teguran1 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties?.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 2 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.teguran2 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties?.teguran2 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties?.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 1 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.peringatan1 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties?.peringatan1 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.bluePenalties?.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 2 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties.peringatan2 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.bluePenalties?.peringatan2 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.bluePenalties?.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
             </div>
           </div>
@@ -819,7 +819,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
           
           <div 
             className="absolute inset-0 pointer-events-none opacity-[0.035] select-none bg-center bg-no-repeat bg-contain" 
-            style={{ backgroundImage: "url('/jrzscorewatermak.png')", backgroundSize: "75%" }}
+            style={{ backgroundImage: "url('./jrzscorewatermak.png')", backgroundSize: "75%" }}
           />
 
           {/* Top Custom/Default Logo Icon - Positioned in the center of the top space */}
@@ -915,7 +915,7 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
             <span className="text-[#FF2B45] font-sans italic font-black text-2xl sm:text-3xl tracking-wider select-none uppercase drop-shadow-[0_0_12px_rgba(255,43,69,0.4)]">
               MERAH
             </span>
-            {state.redPenalties.disqualified && (
+            {state.redPenalties?.disqualified && (
               <span className="px-2 py-0.5 rounded bg-red-600 text-white font-sans font-black text-xs uppercase animate-pulse font-bold font-bold">
                 DISQ
               </span>
@@ -946,28 +946,28 @@ export function ScoreboardView({ state: propState, onBack, onToggleFullscreen, i
           <div className="w-full bg-[#1f050c]/50 border border-amber-950/30 rounded-xl p-1.5 sm:p-2 mt-1.5 sm:mt-2 shrink-0 z-10">
             <div className="grid grid-cols-6 gap-1.5 w-full">
               {/* BINAAN 1 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.binaan1 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties?.binaan1 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./binaan1.png" alt="B1" className={`h-5 sm:h-6 object-contain ${state.redPenalties?.binaan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* BINAAN 2 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.binaan2 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties?.binaan2 ? "bg-amber-400 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./binaan2.png" alt="B2" className={`h-5 sm:h-6 object-contain ${state.redPenalties?.binaan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 1 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.teguran1 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties?.teguran1 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./teguran1.png" alt="T1" className={`h-5 sm:h-6 object-contain ${state.redPenalties?.teguran1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* TEGURAN 2 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.teguran2 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties?.teguran2 ? "bg-orange-500 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./teguran2.png" alt="T2" className={`h-5 sm:h-6 object-contain ${state.redPenalties?.teguran2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 1 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.peringatan1 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.redPenalties.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties?.peringatan1 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./peringatan1.png" alt="P1" className={`h-5 sm:h-6 object-contain ${state.redPenalties?.peringatan1 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
               {/* PERINGATAN 2 */}
-              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties.peringatan2 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
-                <img src="./peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.redPenalties.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
+              <div className={`h-8 sm:h-9 rounded-lg flex items-center justify-center border transition-all ${state.redPenalties?.peringatan2 ? "bg-red-700 border-white shadow-md scale-105" : "bg-neutral-900/10 border-neutral-850"}`}>
+                <img src="./peringatan2.png" alt="P2" className={`h-5 sm:h-6 object-contain ${state.redPenalties?.peringatan2 ? "opacity-100" : "opacity-25 grayscale"}`} referrerPolicy="no-referrer" />
               </div>
             </div>
           </div>

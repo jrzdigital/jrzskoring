@@ -2224,11 +2224,11 @@ export function LaporanPanel({
                   {/* Logo Kiri */}
                   <div className="w-20 h-20 flex items-center justify-center shrink-0">
                     <img
-                      src={logoLeftSrc || "/LogoIPSI.png"}
+                      src={logoLeftSrc || "./LogoIPSI.png"}
                       alt="Logo Kiri"
                       className="max-w-full max-h-full object-contain"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/LogoIPSI.png";
+                        (e.target as HTMLImageElement).src = "./LogoIPSI.png";
                       }}
                     />
                   </div>
@@ -2249,11 +2249,11 @@ export function LaporanPanel({
                   {/* Logo Kanan */}
                   <div className="w-20 h-20 flex items-center justify-center shrink-0">
                     <img
-                      src={logoRightSrc || "/LogoIPSI.png"}
+                      src={logoRightSrc || "./LogoIPSI.png"}
                       alt="Logo Kanan"
                       className="max-w-full max-h-full object-contain"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/LogoIPSI.png";
+                        (e.target as HTMLImageElement).src = "./LogoIPSI.png";
                       }}
                     />
                   </div>

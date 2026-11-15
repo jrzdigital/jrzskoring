@@ -592,7 +592,7 @@ export function SuperAdminDashboard({
       {/* Background Glow */}
       <div 
         className="fixed inset-0 opacity-[0.03] pointer-events-none bg-center bg-no-repeat bg-contain z-0"
-        style={{ backgroundImage: "url('/jrzscoreutama.png')", backgroundSize: "min(50vw, 50vh)" }}
+        style={{ backgroundImage: "url('./jrzscoreutama.png')", backgroundSize: "min(50vw, 50vh)" }}
       />
 
       {/* TOAST NOTIFICATION */}

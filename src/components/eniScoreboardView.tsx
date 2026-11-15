@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { MatchState, ActionLog } from "../types";
 import { Shield, Award, AlertTriangle, Timer as TimerIcon, ArrowLeft, Maximize2, Trophy, TrendingUp } from "lucide-react";
 import VisualSummaryModal from "./VisualSummaryModal";
-const defaultLogo = "/jrzscoreutama.png";
-const logoIpsiDefault = "/LogoIPSI.png";
-const logoMonitor1Default = "/logomonitor1.png";
-const logoMonitor2Default = "/logomonitor2.png";
+const defaultLogo = "./jrzscoreutama.png";
+const logoIpsiDefault = "./LogoIPSI.png";
+const logoMonitor1Default = "./logomonitor1.png";
+const logoMonitor2Default = "./logomonitor2.png";
 
 const parseClassCategory = (str: string) => {
   const result = {
