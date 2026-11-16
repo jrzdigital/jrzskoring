@@ -159,24 +159,20 @@ export default function ScoreboardView({
       }
     };
     window.addEventListener("storage", handleStorageChange);
-    
+
     // Also poll/check periodically for instant local update in same page frames
     const interval = setInterval(() => {
       const currentKiri = localStorage.getItem("logo_kiri") || "";
-      if (currentKiri !== logoKiri) {
-        setLogoKiri(currentKiri);
-      }
+      setLogoKiri((prev) => (prev !== currentKiri ? currentKiri : prev));
       const currentKanan = localStorage.getItem("logo_kanan") || "";
-      if (currentKanan !== logoKanan) {
-        setLogoKanan(currentKanan);
-      }
+      setLogoKanan((prev) => (prev !== currentKanan ? currentKanan : prev));
     }, 1000);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       clearInterval(interval);
     };
-  }, [logoKiri, logoKanan]);
+  }, []);
 
   // Helper to parse logs and reconstruct the score timeline for the recharts line chart
   const getScoreHistoryData = (actionLogs: ActionLog[] = []) => {

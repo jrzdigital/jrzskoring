@@ -553,13 +553,15 @@ export function SekretarisPanel({
   const [baganSchemeType, setBaganSchemeType] = useState<"POOL_AB" | "SINGLE_NO_POOL" | "DOUBLE_POOL">("SINGLE_NO_POOL");
   const [baganViewEngine, setBaganViewEngine] = useState<"INTERACTIVE" | "COMPACT">("INTERACTIVE");
 
+  const onSubScreenChangeRef = useRef(onSubScreenChange);
+  onSubScreenChangeRef.current = onSubScreenChange;
   useEffect(() => {
     const isSub = activeTab !== "PARAMETER" || Boolean(showRegistrasiScreen || showBaganScreen || showSchedulePreviewScreen);
     const timer = setTimeout(() => {
-      onSubScreenChange?.(isSub);
+      onSubScreenChangeRef.current?.(isSub);
     }, 0);
     return () => clearTimeout(timer);
-  }, [activeTab, showRegistrasiScreen, showBaganScreen, showSchedulePreviewScreen, onSubScreenChange]);
+  }, [activeTab, showRegistrasiScreen, showBaganScreen, showSchedulePreviewScreen]);
   const [baganScale, setBaganScale] = useState(0.65);
   const fileInputBaganExcelRef = useRef<HTMLInputElement>(null);
 

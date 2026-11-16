@@ -370,16 +370,22 @@ export const TgrsGandaSoloJuryPad: React.FC<TgrsGandaSoloJuryPadProps> = ({
   // agar slider pas 100% di layar iOS / Android dengan koordinat sentuh 1:1 akurat
   useEffect(() => {
     if (typeof document === "undefined") return;
-    if (viewport.isMobileDevice) {
-      document.documentElement.setAttribute("data-native-mobile-fit", "true");
-    } else {
-      document.documentElement.removeAttribute("data-native-mobile-fit");
+    const prevAttr = document.documentElement.getAttribute("data-native-mobile-fit");
+    const nextAttr = viewport.isMobileDevice ? "true" : null;
+    if (prevAttr !== nextAttr) {
+      if (nextAttr) {
+        document.documentElement.setAttribute("data-native-mobile-fit", nextAttr);
+      } else {
+        document.documentElement.removeAttribute("data-native-mobile-fit");
+      }
+      window.dispatchEvent(new Event("jrz_scaler_override"));
     }
-    window.dispatchEvent(new Event("jrz_scaler_override"));
 
     return () => {
-      document.documentElement.removeAttribute("data-native-mobile-fit");
-      window.dispatchEvent(new Event("jrz_scaler_override"));
+      if (document.documentElement.hasAttribute("data-native-mobile-fit")) {
+        document.documentElement.removeAttribute("data-native-mobile-fit");
+        window.dispatchEvent(new Event("jrz_scaler_override"));
+      }
     };
   }, [viewport.isMobileDevice]);
 

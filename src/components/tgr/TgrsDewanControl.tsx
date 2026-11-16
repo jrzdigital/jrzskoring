@@ -68,12 +68,14 @@ export const TgrsDewanControl: React.FC<TgrsDewanControlProps> = (props) => {
     return Math.max(4, Math.min(10, state.judgesCount || 10));
   });
 
+  const onUpdateStateRef = useRef(onUpdateState);
+  onUpdateStateRef.current = onUpdateState;
   useEffect(() => {
     const handleJudgesCountChanged = (e: any) => {
       const c = e.detail ? Number(e.detail) : 10;
       if (c >= 4 && c <= 10) {
         setLocalJudgesCount(c);
-        onUpdateState((prev) => {
+        onUpdateStateRef.current((prev) => {
           if (prev.judgesCount === c) return prev;
           const next = { ...prev, judgesCount: c };
           saveTgrsLiveState(next);
@@ -83,7 +85,7 @@ export const TgrsDewanControl: React.FC<TgrsDewanControlProps> = (props) => {
     };
     window.addEventListener("jrz_judges_count_changed", handleJudgesCountChanged);
     return () => window.removeEventListener("jrz_judges_count_changed", handleJudgesCountChanged);
-  }, [onUpdateState]);
+  }, []);
 
   useEffect(() => {
     const handleFs = () => {

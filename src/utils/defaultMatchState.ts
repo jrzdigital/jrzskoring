@@ -28,6 +28,10 @@ const DEFAULT_STATS = () => ({
   punches: 0,
   kicks: 0,
   drops: 0,
+  locks: 0,
+  warnings: 0,
+  overrides: 0,
+  pastPenaltiesDeductions: 0,
   penalties: 0
 });
 
@@ -133,6 +137,15 @@ export function normalizeMatchState(raw: any): MatchState {
   const roundDuration = Number(raw.roundDuration || 120);
   const timeLeft = typeof raw.timeLeft === "number" ? raw.timeLeft : (typeof raw.roundTimer === "number" ? raw.roundTimer : roundDuration);
 
+  const rawRedStats = raw.redStats || {};
+  const rawBlueStats = raw.blueStats || {};
+  const redPunches = Number(rawRedStats.punches ?? rawRedStats.punch ?? raw.merah?.scoreDetails?.pukulan ?? 0);
+  const redKicks = Number(rawRedStats.kicks ?? rawRedStats.kick ?? raw.merah?.scoreDetails?.tendangan ?? 0);
+  const redDrops = Number(rawRedStats.drops ?? rawRedStats.drop ?? raw.merah?.scoreDetails?.jatuhan ?? 0);
+  const bluePunches = Number(rawBlueStats.punches ?? rawBlueStats.punch ?? raw.biru?.scoreDetails?.pukulan ?? 0);
+  const blueKicks = Number(rawBlueStats.kicks ?? rawBlueStats.kick ?? raw.biru?.scoreDetails?.tendangan ?? 0);
+  const blueDrops = Number(rawBlueStats.drops ?? rawBlueStats.drop ?? raw.biru?.scoreDetails?.jatuhan ?? 0);
+
   return {
     ...base,
     ...raw,
@@ -158,8 +171,26 @@ export function normalizeMatchState(raw: any): MatchState {
     fighterBlueClub: blueClub,
     scoreRed,
     scoreBlue,
-    redStats: { ...DEFAULT_STATS(), ...(raw.redStats || {}) },
-    blueStats: { ...DEFAULT_STATS(), ...(raw.blueStats || {}) },
+    redStats: {
+      ...DEFAULT_STATS(),
+      ...rawRedStats,
+      punches: redPunches,
+      punch: redPunches,
+      kicks: redKicks,
+      kick: redKicks,
+      drops: redDrops,
+      drop: redDrops
+    },
+    blueStats: {
+      ...DEFAULT_STATS(),
+      ...rawBlueStats,
+      punches: bluePunches,
+      punch: bluePunches,
+      kicks: blueKicks,
+      kick: blueKicks,
+      drops: blueDrops,
+      drop: blueDrops
+    },
     redPenalties: { ...DEFAULT_PENALTIES(), ...(raw.redPenalties || {}) },
     bluePenalties: { ...DEFAULT_PENALTIES(), ...(raw.bluePenalties || {}) },
     juryScores: raw.juryScores || base.juryScores,
@@ -171,13 +202,14 @@ export function normalizeMatchState(raw: any): MatchState {
       skor: scoreRed,
       teguranCount: raw.merah?.teguranCount || 0,
       peringatanCount: raw.merah?.peringatanCount || 0,
-      scoreDetails: raw.merah?.scoreDetails || {
-        pukulan: 0,
-        tendangan: 0,
-        jatuhan: 0,
-        binaan: 0,
-        teguran: 0,
-        peringatan: 0,
+      scoreDetails: {
+        pukulan: redPunches,
+        tendangan: redKicks,
+        jatuhan: redDrops,
+        binaan: (raw.redPenalties?.binaan1 ? 1 : 0) + (raw.redPenalties?.binaan2 ? 1 : 0),
+        teguran: (raw.redPenalties?.teguran1 ? 1 : 0) + (raw.redPenalties?.teguran2 ? 1 : 0),
+        peringatan: (raw.redPenalties?.peringatan1 ? 1 : 0) + (raw.redPenalties?.peringatan2 ? 1 : 0),
+        ...(raw.merah?.scoreDetails || {}),
         total: scoreRed
       }
     },
@@ -187,13 +219,14 @@ export function normalizeMatchState(raw: any): MatchState {
       skor: scoreBlue,
       teguranCount: raw.biru?.teguranCount || 0,
       peringatanCount: raw.biru?.peringatanCount || 0,
-      scoreDetails: raw.biru?.scoreDetails || {
-        pukulan: 0,
-        tendangan: 0,
-        jatuhan: 0,
-        binaan: 0,
-        teguran: 0,
-        peringatan: 0,
+      scoreDetails: {
+        pukulan: bluePunches,
+        tendangan: blueKicks,
+        jatuhan: blueDrops,
+        binaan: (raw.bluePenalties?.binaan1 ? 1 : 0) + (raw.bluePenalties?.binaan2 ? 1 : 0),
+        teguran: (raw.bluePenalties?.teguran1 ? 1 : 0) + (raw.bluePenalties?.teguran2 ? 1 : 0),
+        peringatan: (raw.bluePenalties?.peringatan1 ? 1 : 0) + (raw.bluePenalties?.peringatan2 ? 1 : 0),
+        ...(raw.biru?.scoreDetails || {}),
         total: scoreBlue
       }
     },
@@ -202,6 +235,9 @@ export function normalizeMatchState(raw: any): MatchState {
       ...base.verification!,
       ...(raw.verification || {}),
       votes: { 1: null, 2: null, 3: null, ...(raw.verification?.votes || {}) }
-    }
+    },
+    winnerPublished: Boolean(raw.winnerPublished),
+    winnerColor: raw.winnerColor ?? null,
+    winnerMethod: raw.winnerMethod
   };
 }

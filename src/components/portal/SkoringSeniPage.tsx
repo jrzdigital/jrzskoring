@@ -91,11 +91,13 @@ export function SkoringSeniPage({
     }
   }, [defaultMonitorMode]);
 
+  const onModeChangeRef = useRef(onModeChange);
+  onModeChangeRef.current = onModeChange;
   useEffect(() => {
-    if (onModeChange) {
-      onModeChange(seniMode);
+    if (onModeChangeRef.current) {
+      onModeChangeRef.current(seniMode);
     }
-  }, [seniMode, onModeChange]);
+  }, [seniMode]);
 
   // Listen to cross-window / cross-device updates for realtime monitor
   useEffect(() => {

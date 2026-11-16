@@ -68,16 +68,18 @@ function BreakCountdownTimer({ onFinish }: { onFinish?: () => void }) {
     return () => clearInterval(interval);
   }, [isActive, timeLeft > 0]);
 
+  const onFinishRef = useRef(onFinish);
+  onFinishRef.current = onFinish;
   useEffect(() => {
     if (timeLeft === 0 && prevBreakTimeRef.current > 0) {
       setIsActive(false);
       try {
         sound.playWhistle();
       } catch {}
-      if (onFinish) onFinish();
+      if (onFinishRef.current) onFinishRef.current();
     }
     prevBreakTimeRef.current = timeLeft;
-  }, [timeLeft, onFinish]);
+  }, [timeLeft]);
 
   const progressPercent = Math.max(0, Math.min(100, (timeLeft / 30) * 100));
 

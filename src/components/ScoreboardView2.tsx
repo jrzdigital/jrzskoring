@@ -7,7 +7,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { MatchState, MatchStatus } from "../types";
 import { Shield, CheckCircle2, Lock, Clock, Activity, User, Trophy, Crown, Award, Sparkles, Eye, EyeOff, Swords, Flame, Zap, Calendar, ArrowRight } from "lucide-react";
 import { sound } from "../utils/sound";
-import { matchEngine } from "../utils/matchEngine";
+import { matchEngine, isSameMatchStateSnapshot } from "../utils/matchEngine";
 import { rtdbScoringEngine } from "../services/rtdbScoringEngine";
 import confetti from "canvas-confetti";
 import { getDynamicFontSizeClass, getDynamicTextStyle } from "../utils/textScalingHelper";
@@ -23,7 +23,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
   const [liveState, setLiveState] = useState<MatchState>(propState);
 
   useEffect(() => {
-    setLiveState(propState);
+    setLiveState((prev) => (isSameMatchStateSnapshot(prev, propState) ? prev : propState));
   }, [propState]);
 
   // Real-time synchronization directly with matchEngine and Firebase RTDB
@@ -32,7 +32,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
       if (!remoteState) return;
       setLiveState((prev) => {
         if (!prev) return remoteState;
-        return {
+        const mergedNext: MatchState = {
           ...prev,
           ...remoteState,
           scoreBlue: remoteState.scoreBlue ?? prev.scoreBlue,
@@ -45,6 +45,7 @@ export function ScoreboardView2({ state: propState, onBack, isMonitorMode = fals
           juryScores: remoteState.juryScores ?? prev.juryScores,
           logs: remoteState.logs ?? prev.logs
         };
+        return isSameMatchStateSnapshot(prev, mergedNext) ? prev : mergedNext;
       });
     };
 

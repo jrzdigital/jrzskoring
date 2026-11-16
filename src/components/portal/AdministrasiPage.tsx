@@ -109,22 +109,21 @@ export function AdministrasiPage({
     } catch (e) {}
   }, [selectedArena]);
 
-  useEffect(() => {
-    if (!currentUser && activeSubTab !== "BAGAN" && activeSubTab !== "JADWAL") {
-      setActiveSubTab("BAGAN");
-      if (onSubTabChange) {
-        onSubTabChange("BAGAN");
-      }
-    }
-  }, [currentUser, activeSubTab, onSubTabChange]);
+  const onSubTabChangeRef = useRef(onSubTabChange);
+  onSubTabChangeRef.current = onSubTabChange;
 
   useEffect(() => {
-    if (!currentUser && initialSubTab !== "BAGAN" && initialSubTab !== "JADWAL") {
-      setActiveSubTab("BAGAN");
+    if (!currentUser) {
+      if (initialSubTab === "BAGAN" || initialSubTab === "JADWAL") {
+        setActiveSubTab((prev) => (prev !== initialSubTab ? initialSubTab : prev));
+      } else if (activeSubTab !== "BAGAN" && activeSubTab !== "JADWAL") {
+        setActiveSubTab("BAGAN");
+        onSubTabChangeRef.current?.("BAGAN");
+      }
       return;
     }
-    if (initialSubTab && initialSubTab !== activeSubTab) {
-      setActiveSubTab(initialSubTab);
+    if (initialSubTab) {
+      setActiveSubTab((prev) => (prev !== initialSubTab ? initialSubTab : prev));
     }
   }, [initialSubTab, currentUser]);
 

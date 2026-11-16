@@ -6,9 +6,9 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback, useReducer } from "react";
 import { MatchState, FighterColor, ActionType, MatchStatus, AuthSession, UserAccount } from "../types";
 import { sound } from "../utils/sound";
-import { matchEngine } from "../utils/matchEngine";
+import { matchEngine, isSameMatchStateSnapshot } from "../utils/matchEngine";
 import { isStaticHosting } from "../utils/networkHost";
-import { createDefaultMatchState, normalizeMatchState, getSyncedNow, computeLiveTimeLeft } from "../utils/defaultMatchState";
+import { createDefaultMatchState, normalizeMatchState, getSyncedNow } from "../utils/defaultMatchState";
 import { authService } from "../services/authService";
 
 // Dynamic code-splitting for heavy match panels to enable near-instant initial landing page loading
@@ -327,6 +327,9 @@ function hubMatchReducer(state: HubMatchState, action: HubMatchAction): HubMatch
 
     case "UPDATE_MATCH_STATE": {
       const nextMatch = action.updater(state.matchState);
+      if (nextMatch === state.matchState) {
+        return state;
+      }
       return {
         ...state,
         matchState: nextMatch
@@ -551,11 +554,13 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
     }
   }, [initialMode]);
 
+  const onModeChangeRef = useRef(onModeChange);
+  onModeChangeRef.current = onModeChange;
   useEffect(() => {
-    if (onModeChange) {
-      onModeChange(appMode);
+    if (onModeChangeRef.current) {
+      onModeChangeRef.current(appMode);
     }
-  }, [appMode, onModeChange]);
+  }, [appMode]);
   const [fullscreenMode, setFullscreenMode] = useState<string | null>(null);
   const [nativeFs, setNativeFs] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -1191,7 +1196,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
     prevTimeLeftRef.current = matchState.timeLeft;
   }, [matchState]);
 
-  // Sinkronkan state aktif ke Firebase Realtime Database saat perubahan bermakna
+  // Sinkronkan state aktif secara lokal (tanpa memicu broadcast balik) saat perubahan bermakna
   const lastVaultSigRef = useRef<string>("");
   useEffect(() => {
     if (matchState && matchState.id) {
@@ -1295,7 +1300,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
             showRoundOverPopup: false,
             secretarySignalNextRound: false
           };
-          matchEngine.setState(anchored);
+          matchEngine.syncStateQuietly(anchored);
           return anchored;
         }
 
@@ -1366,7 +1371,7 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
         };
 
         if (shouldPersistTick) {
-          matchEngine.setState(updatedRunning);
+          matchEngine.syncStateQuietly(updatedRunning);
         }
 
         return updatedRunning;
@@ -1378,19 +1383,18 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
 
   // Real-time in-memory & Firebase match state synchronization
   useEffect(() => {
-    const unsubscribe = matchEngine.subscribe((remoteState) => {
-      setMatchState(prev => {
-        if (!prev) return remoteState;
-        if (remoteState.status === "RUNNING") {
-          const now = getSyncedNow();
-          if (remoteState.timeLeft === 0) {
-            return {
-              ...remoteState,
-              timeLeft: 0,
-              timerEndAt: null
-            };
-          }
-
+    const mergeIncomingSnapshot = (prev: MatchState | undefined, remoteState: MatchState): MatchState => {
+      if (!prev) return remoteState;
+      let nextCandidate: MatchState = remoteState;
+      if (remoteState.status === "RUNNING") {
+        const now = getSyncedNow();
+        if (remoteState.timeLeft === 0) {
+          nextCandidate = {
+            ...remoteState,
+            timeLeft: 0,
+            timerEndAt: null
+          };
+        } else {
           let effectiveEndAt: number | null = null;
           if (
             prev.status === "RUNNING" &&
@@ -1409,16 +1413,30 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
             ? Math.max(0, Math.ceil((effectiveEndAt - now) / 1000))
             : (typeof remoteState.timeLeft === "number" ? remoteState.timeLeft : 0);
 
-          return {
+          nextCandidate = {
             ...remoteState,
             timerEndAt: effectiveEndAt,
             timerStartedAt: remoteState.timerStartedAt || prev.timerStartedAt || now,
             timeLeft: calculatedTime
           };
         }
-        return remoteState;
+      }
+      if (isSameMatchStateSnapshot(prev, nextCandidate)) {
+        return prev;
+      }
+      return nextCandidate;
+    };
+
+    const unsubscribe = matchEngine.subscribe((remoteState) => {
+      let didChange = false;
+      setMatchState(prev => {
+        const next = mergeIncomingSnapshot(prev, remoteState);
+        didChange = next !== prev;
+        return next;
       });
-      setSyncCount(prev => prev + 1);
+      if (didChange) {
+        setSyncCount(prev => prev + 1);
+      }
     });
 
     return () => {
@@ -1429,47 +1447,58 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
   // Subscribe to Firebase Realtime Database active match state & atomic jury press updates
   useEffect(() => {
     const applyIncomingState = (remoteState: MatchState) => {
+      let didChange = false;
       setMatchState(prev => {
-        if (!prev) return remoteState;
+        if (!prev) {
+          didChange = true;
+          return remoteState;
+        }
+        let nextCandidate: MatchState = remoteState;
         if (remoteState.status === "RUNNING") {
           const now = getSyncedNow();
           if (remoteState.timeLeft === 0) {
-            return {
+            nextCandidate = {
               ...remoteState,
               timeLeft: 0,
               timerEndAt: null
             };
+          } else {
+            let effectiveEndAt: number | null = null;
+            if (
+              prev.status === "RUNNING" &&
+              prev.activeRound === remoteState.activeRound &&
+              typeof prev.timerEndAt === "number" &&
+              prev.timerEndAt > now
+            ) {
+              effectiveEndAt = prev.timerEndAt;
+            } else if (typeof remoteState.timerEndAt === "number") {
+              effectiveEndAt = remoteState.timerEndAt;
+            } else if (typeof remoteState.timeLeft === "number" && remoteState.timeLeft > 0) {
+              effectiveEndAt = now + remoteState.timeLeft * 1000;
+            }
+
+            const calculatedTime = effectiveEndAt !== null
+              ? Math.max(0, Math.ceil((effectiveEndAt - now) / 1000))
+              : (typeof remoteState.timeLeft === "number" ? remoteState.timeLeft : 0);
+
+            nextCandidate = {
+              ...remoteState,
+              timerEndAt: effectiveEndAt,
+              timerStartedAt: remoteState.timerStartedAt || prev.timerStartedAt || now,
+              timeLeft: calculatedTime
+            };
           }
-
-          let effectiveEndAt: number | null = null;
-          if (
-            prev.status === "RUNNING" &&
-            prev.activeRound === remoteState.activeRound &&
-            typeof prev.timerEndAt === "number" &&
-            prev.timerEndAt > now
-          ) {
-            effectiveEndAt = prev.timerEndAt;
-          } else if (typeof remoteState.timerEndAt === "number") {
-            effectiveEndAt = remoteState.timerEndAt;
-          } else if (typeof remoteState.timeLeft === "number" && remoteState.timeLeft > 0) {
-            effectiveEndAt = now + remoteState.timeLeft * 1000;
-          }
-
-          const calculatedTime = effectiveEndAt !== null
-            ? Math.max(0, Math.ceil((effectiveEndAt - now) / 1000))
-            : (typeof remoteState.timeLeft === "number" ? remoteState.timeLeft : 0);
-
-          return {
-            ...remoteState,
-            timerEndAt: effectiveEndAt,
-            timerStartedAt: remoteState.timerStartedAt || prev.timerStartedAt || now,
-            timeLeft: calculatedTime
-          };
         }
-        return remoteState;
+        if (isSameMatchStateSnapshot(prev, nextCandidate)) {
+          return prev;
+        }
+        didChange = true;
+        return nextCandidate;
       });
-      setErrorMsg(null);
-      setSyncCount(prev => prev + 1);
+      if (didChange) {
+        setErrorMsg(null);
+        setSyncCount(prev => prev + 1);
+      }
     };
 
     const unsubMatch = rtdbScoringEngine.listenToActiveMatch(applyIncomingState);
@@ -1702,49 +1731,60 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
         return;
       }
 
+      let didChange = false;
       setMatchState(prev => {
-        if (!prev) return merged;
+        if (!prev) {
+          didChange = true;
+          return merged;
+        }
+        let nextCandidate: MatchState = merged;
         if (merged.status === "RUNNING") {
           const now = getSyncedNow();
           if (merged.timeLeft === 0) {
-            return {
+            nextCandidate = {
               ...merged,
               timeLeft: 0,
               timerEndAt: null
             };
+          } else {
+            let effectiveEndAt: number | null = null;
+            if (
+              prev.status === "RUNNING" &&
+              prev.activeRound === merged.activeRound &&
+              typeof prev.timerEndAt === "number" &&
+              prev.timerEndAt > now
+            ) {
+              effectiveEndAt = prev.timerEndAt;
+            } else if (typeof merged.timerEndAt === "number") {
+              effectiveEndAt = merged.timerEndAt;
+            } else if (typeof merged.timeLeft === "number" && merged.timeLeft > 0) {
+              effectiveEndAt = now + merged.timeLeft * 1000;
+            }
+
+            const calculatedTime = effectiveEndAt !== null
+              ? Math.max(0, Math.ceil((effectiveEndAt - now) / 1000))
+              : (typeof merged.timeLeft === "number" ? merged.timeLeft : 0);
+
+            nextCandidate = {
+              ...merged,
+              timerEndAt: effectiveEndAt,
+              timerStartedAt: merged.timerStartedAt || prev.timerStartedAt || now,
+              timeLeft: calculatedTime
+            };
           }
-
-          let effectiveEndAt: number | null = null;
-          if (
-            prev.status === "RUNNING" &&
-            prev.activeRound === merged.activeRound &&
-            typeof prev.timerEndAt === "number" &&
-            prev.timerEndAt > now
-          ) {
-            effectiveEndAt = prev.timerEndAt;
-          } else if (typeof merged.timerEndAt === "number") {
-            effectiveEndAt = merged.timerEndAt;
-          } else if (typeof merged.timeLeft === "number" && merged.timeLeft > 0) {
-            effectiveEndAt = now + merged.timeLeft * 1000;
-          }
-
-          const calculatedTime = effectiveEndAt !== null
-            ? Math.max(0, Math.ceil((effectiveEndAt - now) / 1000))
-            : (typeof merged.timeLeft === "number" ? merged.timeLeft : 0);
-
-          return {
-            ...merged,
-            timerEndAt: effectiveEndAt,
-            timerStartedAt: merged.timerStartedAt || prev.timerStartedAt || now,
-            timeLeft: calculatedTime
-          };
         }
-        return merged;
+        if (isSameMatchStateSnapshot(prev, nextCandidate)) {
+          return prev;
+        }
+        didChange = true;
+        return nextCandidate;
       });
-      setErrorMsg(null);
-      setSyncCount(prev => prev + 1);
+      if (didChange) {
+        setErrorMsg(null);
+        setSyncCount(prev => prev + 1);
+      }
       // Update local in-memory state cleanly without redundant broadcasts
-      matchEngine.setState(merged);
+      matchEngine.syncStateQuietly(merged);
     };
 
     const fetchState = async () => {
@@ -1898,8 +1938,9 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
   };
 
   const handleRoundAction = async (roundAction: "NEXT" | "SET" | "FINISH", targetRound?: number) => {
-    if (!matchState) return;
-    const updated = await rtdbScoringEngine.handleRoundAction(matchState, roundAction, targetRound);
+    const baseState = matchStateRef.current || matchState || matchEngine.getState();
+    if (!baseState) return;
+    const updated = await rtdbScoringEngine.handleRoundAction(baseState, roundAction, targetRound);
     setMatchState(updated);
     try {
       fetch("/api/match-state/round", {
@@ -1911,8 +1952,9 @@ export function MatchSimHub({ initialMode, onModeChange, isMonitorOnly = false, 
   };
 
   const handleDewanAction = async (actionData: { command: "DROP" | "LOCK" | "PENALTY" | "OVERRIDE" | "CANCEL_DROP" | "RESET_ROUND_PENALTIES" | "DECLARE_VICTORY" | "PUNCH" | "CANCEL_PUNCH" | "KICK" | "CANCEL_KICK"; fighter: "RED" | "BLUE"; penaltyType?: string; overridePoints?: number }) => {
-    if (!matchState) return;
-    const updated = await rtdbScoringEngine.handleDewanAction(matchState, actionData);
+    const baseState = matchStateRef.current || matchState || matchEngine.getState();
+    if (!baseState) return;
+    const updated = await rtdbScoringEngine.handleDewanAction(baseState, actionData);
     setMatchState(updated);
     try {
       fetch("/api/dewan/action", {

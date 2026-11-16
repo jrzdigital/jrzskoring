@@ -48,6 +48,7 @@ class RtdbScoringEngine {
   private activeDevices: { [key: string]: { active: boolean; ip?: string; lastSeen: number } } = {};
   private currentMatchState: MatchState | null = null;
   private onMatchStateUpdatedListeners: ((state: MatchState) => void)[] = [];
+  private matchRemoteListeners: Set<(state: MatchState) => void> = new Set();
   private seenRemotePressMap: Record<string, number> = {};
 
   constructor() {
@@ -58,7 +59,7 @@ class RtdbScoringEngine {
   public setCurrentMatchState(state: MatchState) {
     if (state) {
       this.currentMatchState = state;
-      matchEngine.setState(state);
+      matchEngine.syncStateQuietly(state);
     }
   }
 
@@ -71,7 +72,7 @@ class RtdbScoringEngine {
 
   private notifyMatchStateUpdated(state: MatchState) {
     this.currentMatchState = state;
-    matchEngine.setState(state);
+    matchEngine.syncStateQuietly(state);
     this.onMatchStateUpdatedListeners.forEach((listener) => {
       try {
         listener(state);
@@ -295,6 +296,13 @@ class RtdbScoringEngine {
     this.arena = newArena.toUpperCase();
     setActiveArena(this.arena);
     this.initJuryPressListener();
+    if (this.matchRemoteListeners.size > 0) {
+      if (this.unsubscribeMatch) {
+        this.unsubscribeMatch();
+        this.unsubscribeMatch = null;
+      }
+      this.ensureActiveMatchSubscription();
+    }
     this.notifyStatus();
   }
 
@@ -314,11 +322,8 @@ class RtdbScoringEngine {
     }, this.arena);
   }
 
-  public listenToActiveMatch(onRemoteUpdate: (state: MatchState) => void): () => void {
-    if (this.unsubscribeMatch) {
-      this.unsubscribeMatch();
-    }
-
+  private ensureActiveMatchSubscription() {
+    if (this.unsubscribeMatch) return;
     this.unsubscribeMatch = subscribeToActiveMatch((remoteState) => {
       if (remoteState) {
         this.currentMatchState = remoteState;
@@ -326,12 +331,22 @@ class RtdbScoringEngine {
         this.lastSyncTime = Date.now();
         this.syncCount++;
         this.notifyStatus();
-        onRemoteUpdate(remoteState);
+        this.matchRemoteListeners.forEach((cb) => {
+          try {
+            cb(remoteState);
+          } catch {}
+        });
       }
     }, this.arena);
+  }
+
+  public listenToActiveMatch(onRemoteUpdate: (state: MatchState) => void): () => void {
+    this.matchRemoteListeners.add(onRemoteUpdate);
+    this.ensureActiveMatchSubscription();
 
     return () => {
-      if (this.unsubscribeMatch) {
+      this.matchRemoteListeners.delete(onRemoteUpdate);
+      if (this.matchRemoteListeners.size === 0 && this.unsubscribeMatch) {
         this.unsubscribeMatch();
         this.unsubscribeMatch = null;
       }
@@ -468,7 +483,12 @@ class RtdbScoringEngine {
     roundAction: "NEXT" | "SET" | "FINISH",
     targetRound?: number
   ): Promise<MatchState> {
-    const updated = matchEngine.processRoundAction(currentState, roundAction, targetRound);
+    const latestInMem = matchEngine.getState() || this.currentMatchState;
+    const { merged: baseState } = latestInMem
+      ? matchEngine.reconcileMatchStates(latestInMem, currentState, true)
+      : { merged: currentState };
+    const updated = matchEngine.processRoundAction(baseState, roundAction, targetRound);
+    this.notifyMatchStateUpdated(updated);
     this.syncInBackground(updated);
     return updated;
   }
@@ -494,7 +514,12 @@ class RtdbScoringEngine {
       victoryType?: string;
     }
   ): Promise<MatchState> {
-    const updated = matchEngine.processDewanAction(currentState, actionData);
+    const latestInMem = matchEngine.getState() || this.currentMatchState;
+    const { merged: baseState } = latestInMem
+      ? matchEngine.reconcileMatchStates(latestInMem, currentState, true)
+      : { merged: currentState };
+    const updated = matchEngine.processDewanAction(baseState, actionData);
+    this.notifyMatchStateUpdated(updated);
     this.syncInBackground(updated);
     return updated;
   }
